@@ -26,10 +26,8 @@ namespace Sc2FarshStreamHelper
         static void Main()
         {
             battleNetClient = new RestClient("https://eu.api.battle.net");
-#error OAuth token needed
-            oauthToken = @"";
-#error API key needed
-            apiKey = @"";
+            oauthToken = @"sthbd9wz279hw8gx43u5cv2j";
+            apiKey = @"jfqepr6us2a6hbsg5wsmtpnqap9rg7h5";
 
             playerData = new PlayerData();
             ladderMgr = new LadderManager();

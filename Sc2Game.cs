@@ -22,23 +22,20 @@ namespace Sc2FarshStreamHelper
         private const string GameResultUndecided = "Undecided";
 
         public bool isReplay { get; set; }
-        public double displayTime { get; set; }
-        public List<PlayerInfo> players { get; set; }
+        public bool isInProgress { get; set; }
 
-        public bool isInProgress
-        {
-            get
-            {
-                return players != null && players.Exists(x => x.result == GameResultUndecided);
-            }
-        }
+        public List<PlayerInfo> players { get; set; }
 
         public PlayerInfo getMyPlayerInfo()
         {
-            var myName = Program.playerData.activeCharacter.displayName;
-            return players.FirstOrDefault(x =>
-                string.Equals(x.name, myName, StringComparison.InvariantCultureIgnoreCase))
-                ?? players[0];
+            if (players != null && players.Count > 0)
+            {
+                var myName = Program.playerData.activeCharacter.displayName;
+                return players.FirstOrDefault(x =>
+                    string.Equals(x.name, myName, StringComparison.InvariantCultureIgnoreCase))
+                    ?? players[0];
+            }
+            return null;
         }
 
         public PlayerInfo getOtherPlayerInfo(PlayerInfo player)

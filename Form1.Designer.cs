@@ -38,7 +38,7 @@
             // 
             this.sc2HostFetchTimer.Enabled = true;
             this.sc2HostFetchTimer.Interval = 2000;
-            this.sc2HostFetchTimer.Tick += new System.EventHandler(this.sc2HostFetchTimer_Tick);
+            this.sc2HostFetchTimer.Tick += new System.EventHandler(this.OnTimerTick);
             // 
             // webBrowserOutput
             // 

@@ -10,16 +10,18 @@ namespace Sc2FarshStreamHelper
 {
     class Sc2ClientHelper
     {
-        public delegate void IsInGameStateChangedEventHandler(bool isInGame);
-        public event IsInGameStateChangedEventHandler isInGameStateChanged;
+        private class Sc2UiScreenList
+        {
+            public List<string> activeScreens { get; set; }
+        }
+
+        public delegate void GameFinishedEventHandler(Sc2Game game);
+        public event GameFinishedEventHandler GameFinished;
 
         public delegate void CurrentGameUpdatedEventHandler(Sc2Game game);
         public event CurrentGameUpdatedEventHandler currentGameUpdated;
 
         private readonly RestClient restClient_ = new RestClient("http://127.0.0.1:6120");
-
-        private RestRequestAsyncHandle sc2UiRequestHandle_;
-        private RestRequestAsyncHandle sc2GameRequestHandle_;
 
         private Sc2Game currentGame_;
         public Sc2Game currentGame
@@ -33,38 +35,38 @@ namespace Sc2FarshStreamHelper
             }
         }
 
-        private bool isInGame_;
-        public bool isInGame
+        public async Task updateCurrentGame()
         {
-            get { return isInGame_; }
-            private set
+            var responseUi = await restClient_.ExecuteTaskAsync<Sc2UiScreenList>(
+                new RestRequest("ui", Method.POST));
+            if (responseUi.ResponseStatus != ResponseStatus.Completed
+                || responseUi.Data == null)
             {
-                if (isInGame_ != value)
-                {
-                    isInGame_ = value;
-                    isInGameStateChanged?.Invoke(isInGame_);
-                }
+                return;
             }
-        }
+            var responseGame = await restClient_.ExecuteTaskAsync<Sc2Game>(
+                new RestRequest("game", Method.POST));
+            if (responseGame.ResponseStatus != ResponseStatus.Completed
+                || responseGame.Data == null)
+            {
+                return;
+            }
 
-        public void updateUiState(Control caller)
-        {
-            NetworkHelper.requestOnce<Sc2UiScreenList>(caller, restClient_,
-                new RestRequest("ui", Method.POST), ref sc2UiRequestHandle_,
-                screensList =>
-                {
-                    isInGame = screensList.activeScreens.Count == 0;
-                });
-        }
+            Sc2Game newGameData = responseGame.Data;
+            newGameData.isInProgress = responseUi.Data.activeScreens.Count == 0
+                && !newGameData.isReplay
+                && newGameData.players.Count >= 2
+                && newGameData.players.Exists(x => x.result.Equals("Undecided",
+                    StringComparison.InvariantCultureIgnoreCase));
 
-        public void updateCurrentGame(Control caller)
-        {
-            NetworkHelper.requestOnce<Sc2Game>(caller, restClient_,
-                new RestRequest("game", Method.POST), ref sc2GameRequestHandle_,
-                game =>
-                {
-                    currentGame = game;
-                });
+            bool isInProgressChanged = currentGame != null
+                && currentGame.isInProgress != newGameData.isInProgress;
+
+            currentGame = newGameData;
+            if (isInProgressChanged && !currentGame.isInProgress)
+            {
+                GameFinished?.Invoke(currentGame);
+            }
         }
     }
 }

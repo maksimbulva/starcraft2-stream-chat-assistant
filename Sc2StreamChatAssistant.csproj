@@ -74,12 +74,10 @@
     <Compile Include="Sc2Character.cs" />
     <Compile Include="Sc2ClientHelper.cs" />
     <Compile Include="Sc2Game.cs" />
-    <Compile Include="Sc2Href.cs" />
     <Compile Include="Sc2LadderData.cs" />
     <Compile Include="Sc2LadderId.cs" />
     <Compile Include="Sc2LadderTeamData.cs" />
     <Compile Include="Sc2Profile.cs" />
-    <Compile Include="Sc2UiScreenList.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

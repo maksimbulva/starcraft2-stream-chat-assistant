@@ -13,7 +13,6 @@ namespace Sc2FarshStreamHelper
 {
     public partial class FormOutput : Form
     {
-        private bool needUpdateScore_;
         private uint winsCount_;
         private uint losesCount_;
         private int? initialMmr_;
@@ -26,24 +25,22 @@ namespace Sc2FarshStreamHelper
             htmlPage_ = System.IO.File.ReadAllText("output.html");
 
             Program.ladderMgr.DataUpdated += _ => updateBrowserPage();
-            Program.sc2ClientHelper.isInGameStateChanged += onIsInGameStateChanged;
-            Program.sc2ClientHelper.currentGameUpdated += onCurrentGameUpdated;
+            Program.sc2ClientHelper.GameFinished += onGameFinished;
         }
 
-        protected override void OnLoad(EventArgs e)
+        protected async override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
-            Program.sc2ClientHelper.updateUiState(this);
-            Program.sc2ClientHelper.updateCurrentGame(this);
+            await Program.sc2ClientHelper.updateCurrentGame();
 
             updateMmr();
             updateBrowserPage();
         }
 
-        private void sc2HostFetchTimer_Tick(object sender, EventArgs e)
+        private async void OnTimerTick(object sender, EventArgs e)
         {
-            Program.sc2ClientHelper.updateUiState(this);
+            await Program.sc2ClientHelper.updateCurrentGame();
         }
 
         private void sc2MmrUpdateTimer_Tick(object sender, EventArgs e)
@@ -53,26 +50,22 @@ namespace Sc2FarshStreamHelper
                 updateMmr();
         }
 
-        private void onIsInGameStateChanged(bool isInGame)
+        private void onGameFinished(Sc2Game game)
         {
-            if (!isInGame)
+            var myPlayer = game.getMyPlayerInfo();
+            if (myPlayer != null)
             {
-                needUpdateScore_ = true;
+                if (game.getMyPlayerInfo().result.StartsWith(
+                    "V", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    ++winsCount_;
+                }
+                else
+                {
+                    ++losesCount_;
+                }
+                updateBrowserPage();
             }
-            Program.sc2ClientHelper.updateCurrentGame(this);
-        }
-
-        private void onCurrentGameUpdated(Sc2Game game)
-        {
-            if (game != null && needUpdateScore_)
-            {
-                bool isWin = game.getMyPlayerInfo().result.StartsWith(
-                    "V", StringComparison.InvariantCultureIgnoreCase);
-                if (isWin) ++winsCount_; else ++losesCount_;
-                needUpdateScore_ = false;
-            }
-
-            updateBrowserPage();
         }
 
         private void updateMmr()
