@@ -54,7 +54,7 @@ namespace Sc2FarshStreamHelper
             return result;
         }
 
-        public void updateLadder(ulong ladderId, Predicate<Sc2LadderTeamData> filter)
+        public async Task updateLadder(ulong ladderId, Predicate<Sc2LadderTeamData> filter)
         {
             var request = new RestRequest("data/sc2/ladder/" + ladderId, Method.GET);
             request.AddQueryParameter("access_token", "3c89utpmn9vuqc7v4bykga5a");
@@ -83,7 +83,6 @@ namespace Sc2FarshStreamHelper
         {
             var request = new RestRequest(string.Format(@"sc2/profile/{0}/{1}/{2}/ladders",
                 character.id, character.realm, character.displayName), Method.POST);
-            request.AddQueryParameter("apikey", Program.apiKey);
             var response =
                 await Program.battleNetClient.ExecutePostTaskAsync<Sc2Character.LaddersList>(request);
             if (response.ResponseStatus == ResponseStatus.Completed)

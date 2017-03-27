@@ -37,17 +37,7 @@ namespace Sc2FarshStreamHelper
 
         private void readProfileInfo()
         {
-            //Text = "Reading profile info...";
-            var request = new RestRequest("sc2/profile/user", Method.POST);
-            request.AddParameter("access_token", Program.oauthToken);
-            NetworkHelper.requestOnce<Sc2Profile>(this, Program.battleNetClient,
-                request, ref sc2RequestProfileHandle_,
-                x =>
-                {
-                    // TODO - make profile selection
-                    // TODO - do range check
-                    Program.playerData.activeCharacter = x.characters[0];
-                });
+            // TODO
             (new FormOutput()).Show();
         }
 

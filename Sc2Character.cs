@@ -15,7 +15,7 @@ namespace Sc2FarshStreamHelper
 
         public class LadderEntry
         {
-            public Sc2LadderId ladder { get; set; }
+            public List<Sc2LadderId> ladder { get; set; }
             public List<Sc2Character> characters { get; set; }
         }
 

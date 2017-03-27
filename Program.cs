@@ -14,10 +14,23 @@ namespace Sc2FarshStreamHelper
 
         public static RestClient battleNetClient { get; private set; }
 
+        public static ViewModel viewModel { get; private set; }
+
         public static string oauthToken { get; private set; }
         public static string apiKey { get; private set; }
 
         public static Sc2ClientHelper sc2ClientHelper = new Sc2ClientHelper();
+
+        private static WeakReference<LiteDB.LiteDatabase> database_;
+        public static LiteDB.LiteDatabase Database
+        {
+            get
+            {
+                LiteDB.LiteDatabase result = null;
+                database_?.TryGetTarget(out result);
+                return result;
+            }
+        }
 
         /// <summary>
         /// The main entry point for the application.
@@ -25,17 +38,25 @@ namespace Sc2FarshStreamHelper
         [STAThread]
         static void Main()
         {
-            battleNetClient = new RestClient("https://eu.api.battle.net");
-            oauthToken = @"sthbd9wz279hw8gx43u5cv2j";
-            apiKey = @"jfqepr6us2a6hbsg5wsmtpnqap9rg7h5";
+            using (var db = new LiteDB.LiteDatabase(@"data.db"))
+            {
+                database_ = new WeakReference<LiteDB.LiteDatabase>(db);
+                battleNetClient = new RestClient("https://eu.api.battle.net");
+                oauthToken = @"sthbd9wz279hw8gx43u5cv2j";
+                apiKey = @"jfqepr6us2a6hbsg5wsmtpnqap9rg7h5";
 
-            playerData = new PlayerData();
-            ladderMgr = new LadderManager();
+                playerData = new PlayerData();
+                ladderMgr = new LadderManager();
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            // formOutput = new FormOutput();
-            Application.Run(new FormSettings());
+                playerData.FetchPlayerDataAsync().Wait();
+
+                viewModel = new ViewModel();
+
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                // formOutput = new FormOutput();
+                Application.Run(new FormSettings());
+            }
         }
     }
 }

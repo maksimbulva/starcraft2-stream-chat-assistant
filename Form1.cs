@@ -25,29 +25,20 @@ namespace Sc2FarshStreamHelper
             htmlPage_ = System.IO.File.ReadAllText("output.html");
 
             Program.ladderMgr.DataUpdated += _ => updateBrowserPage();
-            Program.sc2ClientHelper.GameFinished += onGameFinished;
+            Program.viewModel.GameFinished += onGameFinished;
         }
 
         protected async override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
-            await Program.sc2ClientHelper.updateCurrentGame();
-
-            updateMmr();
+            await Program.viewModel.UpdateCurrentGame();
             updateBrowserPage();
         }
 
         private async void OnTimerTick(object sender, EventArgs e)
         {
-            await Program.sc2ClientHelper.updateCurrentGame();
-        }
-
-        private void sc2MmrUpdateTimer_Tick(object sender, EventArgs e)
-        {
-            var data = Program.playerData;
-            if (data.activeCharacter != null && data.activeLadder != null)
-                updateMmr();
+            await Program.viewModel.UpdateCurrentGame();
         }
 
         private void onGameFinished(Sc2Game game)
@@ -68,49 +59,38 @@ namespace Sc2FarshStreamHelper
             }
         }
 
-        private void updateMmr()
-        {
-            Program.ladderMgr.updateLadder(Program.playerData.activeLadder.ladder.ladderId,
-                x => x.member.Exists(
-                    teamMember => teamMember.legacyLink.id 
-                    == Program.playerData.activeCharacter.id));
-        }
-
         private void updateBrowserPage()
         {
+            var viewModel = Program.viewModel;
+
             // TODO - do some manipulation
             var activeCharacter = Program.playerData.activeCharacter;
             var activeLadder = Program.playerData.activeLadder;
 
-            int? myMmr = null;
-            if (activeCharacter != null && activeLadder != null)
-            {
-                var ladderData = Program.ladderMgr.getLadderTeamData(activeCharacter.id,
-                    activeLadder.ladder.ladderId);
-                myMmr = ladderData?.rating;
-            }
+            //int? myMmr = null;
+            //if (activeCharacter != null && activeLadder != null)
+            //{
+            //    var ladderData = Program.ladderMgr.getLadderTeamData(activeCharacter.id,
+            //        activeLadder.ladder.ladderId);
+            //    myMmr = ladderData?.rating;
+            //}
 
-            if (!initialMmr_.HasValue && myMmr.HasValue)
-            {
-                initialMmr_ = myMmr;
-            }
+            //if (!initialMmr_.HasValue && myMmr.HasValue)
+            //{
+            //    initialMmr_ = myMmr;
+            //}
 
-            var game = Program.sc2ClientHelper.currentGame;
-            var myPlayer = game?.getMyPlayerInfo();
-            var theirPlayer = game?.getOtherPlayerInfo(myPlayer);
+            var myMmr = viewModel.GetPlayerMmr(0);
 
             var curPage = htmlPage_
-                .Replace("%my_name%", myPlayer != null ? myPlayer.name : string.Empty)
-                .Replace("%my_race%", myPlayer != null ? 
-                    char.ToUpper(myPlayer.race[0]).ToString() : string.Empty)
-                .Replace("%their_name%", theirPlayer != null ? theirPlayer.name : string.Empty)
-                .Replace("%their_race%", theirPlayer != null ?
-                    char.ToUpper(theirPlayer.race[0]).ToString() : string.Empty)
+                .Replace("%my_name%", viewModel.GetPlayerName(0))
+                .Replace("%my_race%", viewModel.GetPlayerRace(0))
+                .Replace("%their_name%", viewModel.GetPlayerName(1))
+                .Replace("%their_race%", viewModel.GetPlayerRace(1))
                 .Replace("%wins_count%", winsCount_.ToString())
                 .Replace("%loses_count%", losesCount_.ToString())
-                .Replace("%my_mmr%", myMmr.HasValue ? myMmr.ToString() : string.Empty)
-                .Replace("%my_mmr_progress%", myMmr.HasValue && initialMmr_.HasValue ?
-                    (myMmr.Value - initialMmr_.Value).ToString("+0;-0") : string.Empty);
+                .Replace("%my_mmr%", myMmr.Item1)
+                .Replace("%my_mmr_progress%", myMmr.Item2);
 
             webBrowserOutput.DocumentText = curPage;
         }

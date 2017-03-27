@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.sc2HostFetchTimer = new System.Windows.Forms.Timer(this.components);
             this.webBrowserOutput = new System.Windows.Forms.WebBrowser();
-            this.sc2MmrUpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // sc2HostFetchTimer
@@ -49,12 +48,6 @@
             this.webBrowserOutput.ScrollBarsEnabled = false;
             this.webBrowserOutput.Size = new System.Drawing.Size(909, 171);
             this.webBrowserOutput.TabIndex = 0;
-            // 
-            // sc2MmrUpdateTimer
-            // 
-            this.sc2MmrUpdateTimer.Enabled = true;
-            this.sc2MmrUpdateTimer.Interval = 5000;
-            this.sc2MmrUpdateTimer.Tick += new System.EventHandler(this.sc2MmrUpdateTimer_Tick);
             // 
             // FormOutput
             // 
@@ -74,7 +67,6 @@
 
         private System.Windows.Forms.Timer sc2HostFetchTimer;
         private System.Windows.Forms.WebBrowser webBrowserOutput;
-        private System.Windows.Forms.Timer sc2MmrUpdateTimer;
     }
 }
 

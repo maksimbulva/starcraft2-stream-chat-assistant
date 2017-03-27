@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,13 @@ namespace Sc2FarshStreamHelper
 {
     class PlayerData
     {
+        private class Sc2PlayerData
+        {
+            public List<Sc2Character> Characters { get; set; }
+        }
+
+        private Sc2PlayerData data_;
+
         public delegate void ActiveCharacterChangedEventHandler(Sc2Character character);
         public event ActiveCharacterChangedEventHandler ActiveCharacterChanged;
 
@@ -38,35 +46,60 @@ namespace Sc2FarshStreamHelper
             }
         }
 
-
-        public PlayerData()
+        public async Task FetchPlayerDataAsync()
         {
-            // TODO - read the data from the server instead
-            activeCharacter = new Sc2Character()
+            var request = new RestRequest("sc2/profile/user", Method.POST);
+            request.AddParameter("access_token", Program.oauthToken);
+            var response = await Program.battleNetClient.ExecuteTaskAsync<Sc2PlayerData>(
+                request);
+            if (response.ResponseStatus != ResponseStatus.Completed
+                || response.Data == null)
             {
-                id = 5957073,
-                realm = 1,
-                displayName = "MxFarsh",
-                ladders = new Sc2Character.LaddersList()
-            };
+                throw new Exception("Cannot fetch user data from battle.net");
+            }
+            data_ = response.Data;
+        }
 
-            activeCharacter.ladders.currentSeason = new List<Sc2Character.LadderEntry>();
-            activeCharacter.ladders.currentSeason.Add(
-                new Sc2Character.LadderEntry()
-                {
-                    ladder = new Sc2LadderId()
-                    {
-                        ladderId = 190923,
-                        league = "DIAMOND",
-                        matchMakingQueue = "LOTV_SOLO",
-                    },
-                    characters = new List<Sc2Character>()
-                    {
-                        activeCharacter
-                    }
-                });
+        public async Task<long?> FetchPlayerMmr(string displayName, string race)
+        {
+            var character = GetPlayerCharacter(displayName);
+            if (character == null)
+            {
+                return null;
+            }
 
-            activeLadder = activeCharacter.ladders.currentSeason[0];
+            var client = new RestClient("https://eu.api.battle.net");
+            var requestLadders = new RestRequest(
+                string.Format("sc2/profile/{0}/{1}/{2}/ladders",
+                    character.id, character.realm, character.displayName),
+                Method.POST);
+            // requestLadders.AddQueryParameter("apikey", Program.apiKey);
+            var responseLadders = client.Execute(
+                requestLadders);
+            if (responseLadders.ResponseStatus != ResponseStatus.Completed
+                || responseLadders.Content == null)
+            {
+                return null;
+            }
+
+            //var ladders = responseLadders.Data.currentSeason.Select(x =>
+            //{
+            //    if (x.ladder != null && x.ladder.Count > 0
+            //        && x.ladder[0].matchMakingQueue == "LOTV_SOLO")
+            //    {
+            //        return x.ladder[0];
+            //    }
+            //    return null;
+            //});
+
+            // Program.ladderMgr.updateLadder
+
+            return 5000;
+        }
+
+        public Sc2Character GetPlayerCharacter(string displayName)
+        {
+            return data_?.Characters?.Find(x => x.displayName == displayName);
         }
     }
 }

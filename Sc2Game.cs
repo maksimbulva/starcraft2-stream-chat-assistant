@@ -30,9 +30,8 @@ namespace Sc2FarshStreamHelper
         {
             if (players != null && players.Count > 0)
             {
-                var myName = Program.playerData.activeCharacter.displayName;
                 return players.FirstOrDefault(x =>
-                    string.Equals(x.name, myName, StringComparison.InvariantCultureIgnoreCase))
+                    Program.playerData.GetPlayerCharacter(x.name) != null)
                     ?? players[0];
             }
             return null;
