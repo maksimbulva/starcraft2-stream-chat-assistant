@@ -91,5 +91,20 @@ namespace Sc2FarshStreamHelper
             }
             // TODO
         }
+
+        public async Task<Sc2LadderTeamData> FetchLadderTeamDataAsync(ulong ladderId,
+            ulong playerId, Sc2Race race)
+        {
+            var ladderData = await NetworkHelper.FetchAsync<Sc2LadderData>(
+                string.Format(@"{0}/data/sc2/ladder/{1}?access_token={2}",
+                Program.battleNetUri, ladderId, Program.accessToken));
+
+            return ladderData.team?.Find(x => x.member.Exists(
+                y =>
+                {
+                    return y.legacyLink != null && y.legacyLink.id == playerId
+                        && y.Race == race;
+                }));
+        }
     }
 }

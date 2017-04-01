@@ -48,19 +48,11 @@ namespace Sc2FarshStreamHelper
 
         public async Task FetchPlayerDataAsync()
         {
-            var request = new RestRequest("sc2/profile/user", Method.POST);
-            request.AddParameter("access_token", Program.oauthToken);
-            var response = await Program.battleNetClient.ExecuteTaskAsync<Sc2PlayerData>(
-                request);
-            if (response.ResponseStatus != ResponseStatus.Completed
-                || response.Data == null)
-            {
-                throw new Exception("Cannot fetch user data from battle.net");
-            }
-            data_ = response.Data;
+            data_ = await NetworkHelper.FetchAsync<Sc2PlayerData>(
+                $"{Program.battleNetUri}/sc2/profile/user?access_token={Program.oauthToken}");
         }
 
-        public async Task<long?> FetchPlayerMmr(string displayName, string race)
+        public async Task<long?> FetchPlayerMmrAsync(string displayName, Sc2Race race)
         {
             var character = GetPlayerCharacter(displayName);
             if (character == null)
@@ -68,33 +60,37 @@ namespace Sc2FarshStreamHelper
                 return null;
             }
 
-            var client = new RestClient("https://eu.api.battle.net");
-            var requestLadders = new RestRequest(
-                string.Format("sc2/profile/{0}/{1}/{2}/ladders",
-                    character.id, character.realm, character.displayName),
-                Method.POST);
-            // requestLadders.AddQueryParameter("apikey", Program.apiKey);
-            var responseLadders = client.Execute(
-                requestLadders);
-            if (responseLadders.ResponseStatus != ResponseStatus.Completed
-                || responseLadders.Content == null)
+            var ladders = await NetworkHelper.FetchAsync<Sc2Character.LaddersList>(
+                string.Format("{0}/sc2/profile/{1}/{2}/{3}/ladders?apikey={4}",
+                    Program.battleNetUri, character.id, character.realm,
+                    character.displayName, Program.apiKey));
+
+            var laddersSolo = new List<Sc2LadderId>();
+
+            ladders.currentSeason.Select(x =>
+                x.ladder != null && x.ladder.Count > 0
+                && x.ladder[0].matchMakingQueue == "LOTV_SOLO"
+                ? x.ladder[0] : null).ToList().ForEach(
+                x =>
+                {
+                    if (x != null)
+                    {
+                        laddersSolo.Add(x);
+                    }
+                });
+
+            foreach (var ladderId in laddersSolo)
             {
-                return null;
+                // TODO
+                var ladderData = await Program.ladderMgr.FetchLadderTeamDataAsync(
+                    ladderId.ladderId, character.id, Sc2Race.Protoss);
+                if (ladderData != null)
+                {
+                    return ladderData.rating;
+                }
             }
 
-            //var ladders = responseLadders.Data.currentSeason.Select(x =>
-            //{
-            //    if (x.ladder != null && x.ladder.Count > 0
-            //        && x.ladder[0].matchMakingQueue == "LOTV_SOLO")
-            //    {
-            //        return x.ladder[0];
-            //    }
-            //    return null;
-            //});
-
-            // Program.ladderMgr.updateLadder
-
-            return 5000;
+            return null;
         }
 
         public Sc2Character GetPlayerCharacter(string displayName)

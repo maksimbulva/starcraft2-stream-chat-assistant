@@ -52,9 +52,9 @@ namespace Sc2FarshStreamHelper
 
             var playerName = GetPlayerName(0);
             var playerRace = GetPlayerRace(0);
-            if (playerName != null && playerRace != null)
+            if (playerName != null)
             {
-                long? mmr = await Program.playerData.FetchPlayerMmr(playerName,
+                long? mmr = await Program.playerData.FetchPlayerMmrAsync(playerName,
                     playerRace);
                 if (mmr.HasValue)
                 {
@@ -89,21 +89,16 @@ namespace Sc2FarshStreamHelper
             return GetPlayerInfo(index)?.name;
         }
 
-        public string GetPlayerRace(int index)
+        public Sc2Race GetPlayerRace(int index)
         {
-            var playerInfo = GetPlayerInfo(index);
-            if (playerInfo != null)
-            {
-                return char.ToUpper(playerInfo.race[0]).ToString();
-            }
-            return null;
+            return Sc2RaceConverter.FromString(GetPlayerInfo(index)?.race);
         }
 
         public Tuple<string, string> GetPlayerMmr(int index)
         {
             var playerName = GetPlayerName(index);
             var playerRace = GetPlayerRace(index);
-            if (playerName != null && playerRace != null)
+            if (playerName != null)
             {
                 if (playerMmrs_.TryGetValue(MakeMmrDictionaryKey(playerName, playerRace),
                     out PlayerMmr playerMmr))
@@ -115,9 +110,9 @@ namespace Sc2FarshStreamHelper
             return new Tuple<string, string>(null, null);
         }
 
-        private string MakeMmrDictionaryKey(string playerName, string playerRace)
+        private string MakeMmrDictionaryKey(string playerName, Sc2Race playerRace)
         {
-            return playerName + "@" + playerRace;
+            return string.Empty; // playerName + "@" + playerRace;
         }
     }
 }

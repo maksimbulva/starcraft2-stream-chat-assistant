@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -17,6 +18,7 @@ namespace Sc2FarshStreamHelper
         public static ViewModel viewModel { get; private set; }
 
         public static string oauthToken { get; private set; }
+        public static string accessToken { get; private set; }
         public static string apiKey { get; private set; }
 
         public static Sc2ClientHelper sc2ClientHelper = new Sc2ClientHelper();
@@ -26,10 +28,24 @@ namespace Sc2FarshStreamHelper
         {
             get
             {
-                LiteDB.LiteDatabase result = null;
-                database_?.TryGetTarget(out result);
+                database_.TryGetTarget(out LiteDB.LiteDatabase result);
                 return result;
             }
+        }
+
+        private static WeakReference<HttpClient> httpClient_;
+        public static HttpClient httpClient
+        {
+            get
+            {
+                httpClient_.TryGetTarget(out HttpClient result);
+                return result;
+            }
+        }
+
+        public static string battleNetUri
+        {
+            get { return "https://eu.api.battle.net"; }
         }
 
         /// <summary>
@@ -41,21 +57,25 @@ namespace Sc2FarshStreamHelper
             using (var db = new LiteDB.LiteDatabase(@"data.db"))
             {
                 database_ = new WeakReference<LiteDB.LiteDatabase>(db);
-                battleNetClient = new RestClient("https://eu.api.battle.net");
-                oauthToken = @"sthbd9wz279hw8gx43u5cv2j";
-                apiKey = @"jfqepr6us2a6hbsg5wsmtpnqap9rg7h5";
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient_ = new WeakReference<HttpClient>(httpClient);
 
-                playerData = new PlayerData();
-                ladderMgr = new LadderManager();
+                    battleNetClient = new RestClient("https://eu.api.battle.net");
+                    oauthToken = @"";
+                    accessToken = @"";
+                    apiKey = @"";
 
-                playerData.FetchPlayerDataAsync().Wait();
+                    playerData = new PlayerData();
+                    ladderMgr = new LadderManager();
 
-                viewModel = new ViewModel();
+                    viewModel = new ViewModel();
 
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                // formOutput = new FormOutput();
-                Application.Run(new FormSettings());
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+                    // formOutput = new FormOutput();
+                    Application.Run(new FormSettings());
+                }
             }
         }
     }

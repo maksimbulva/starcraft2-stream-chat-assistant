@@ -80,6 +80,7 @@
     <Compile Include="Sc2LadderData.cs" />
     <Compile Include="Sc2LadderId.cs" />
     <Compile Include="Sc2LadderTeamData.cs" />
+    <Compile Include="Sc2Race.cs" />
     <Compile Include="ViewModel.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

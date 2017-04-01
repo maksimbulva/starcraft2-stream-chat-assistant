@@ -84,15 +84,31 @@ namespace Sc2FarshStreamHelper
 
             var curPage = htmlPage_
                 .Replace("%my_name%", viewModel.GetPlayerName(0))
-                .Replace("%my_race%", viewModel.GetPlayerRace(0))
+                .Replace("%my_race%", Sc2RaceToString(viewModel.GetPlayerRace(0)))
                 .Replace("%their_name%", viewModel.GetPlayerName(1))
-                .Replace("%their_race%", viewModel.GetPlayerRace(1))
+                .Replace("%their_race%", Sc2RaceToString(viewModel.GetPlayerRace(1)))
                 .Replace("%wins_count%", winsCount_.ToString())
                 .Replace("%loses_count%", losesCount_.ToString())
                 .Replace("%my_mmr%", myMmr.Item1)
                 .Replace("%my_mmr_progress%", myMmr.Item2);
 
             webBrowserOutput.DocumentText = curPage;
+        }
+
+        private static string Sc2RaceToString(Sc2Race race)
+        {
+            switch (race)
+            {
+                case Sc2Race.Terran:
+                    return "T";
+                case Sc2Race.Zerg:
+                    return "Z";
+                case Sc2Race.Protoss:
+                    return "P";
+                case Sc2Race.Random:
+                    return "R";
+            }
+            return string.Empty;
         }
     }
 }
