@@ -1,5 +1,4 @@
-﻿using RestSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -12,8 +11,6 @@ namespace Sc2FarshStreamHelper
     {
         public static PlayerData playerData { get; private set; }
         public static LadderManager ladderMgr { get; private set; }
-
-        public static RestClient battleNetClient { get; private set; }
 
         public static ViewModel viewModel { get; private set; }
 
@@ -61,7 +58,6 @@ namespace Sc2FarshStreamHelper
                 {
                     httpClient_ = new WeakReference<HttpClient>(httpClient);
 
-                    battleNetClient = new RestClient("https://eu.api.battle.net");
                     oauthToken = @"";
                     accessToken = @"";
                     apiKey = @"";

@@ -1,5 +1,4 @@
-﻿using RestSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,33 +14,31 @@ namespace Sc2FarshStreamHelper
             public List<string> ActiveScreens { get; set; }
         }
 
-        private readonly RestClient restClient_ = new RestClient("http://127.0.0.1:6120");
-
         public async Task<Sc2Game> FetchCurrentGame()
         {
-            var responseUi = await restClient_.ExecuteTaskAsync<Sc2UiScreenList>(
-                new RestRequest("ui", Method.POST));
-            if (responseUi.ResponseStatus != ResponseStatus.Completed
-                || responseUi.Data == null)
-            {
-                return null;
-            }
-            var responseGame = await restClient_.ExecuteTaskAsync<Sc2Game>(
-                new RestRequest("game", Method.POST));
-            if (responseGame.ResponseStatus != ResponseStatus.Completed
-                || responseGame.Data == null)
+            var uiScreenList = await NetworkHelper.FetchAsync<Sc2UiScreenList>(
+                "http://127.0.0.1:6120/ui");
+
+            if (uiScreenList == null)
             {
                 return null;
             }
 
-            Sc2Game newGameData = responseGame.Data;
-            newGameData.isInProgress = responseUi.Data.ActiveScreens.Count == 0
-                && !newGameData.isReplay
-                && newGameData.players.Count >= 2
-                && newGameData.players.Exists(x => x.result.Equals("Undecided",
+            var sc2Game = await NetworkHelper.FetchAsync<Sc2Game>(
+                "http://127.0.0.1:6120/game");
+
+            if (sc2Game == null || sc2Game.players == null)
+            {
+                return null;
+            }
+
+            sc2Game.isInProgress = uiScreenList.ActiveScreens?.Count == 0
+                && !sc2Game.isReplay
+                && sc2Game.players.Count >= 2
+                && sc2Game.players.Exists(x => x.result.Equals("Undecided",
                     StringComparison.InvariantCultureIgnoreCase));
 
-            return newGameData;
+            return sc2Game;
         }
     }
 }

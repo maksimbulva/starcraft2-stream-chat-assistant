@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using RestSharp;
 
 namespace Sc2FarshStreamHelper
 {
@@ -38,7 +37,10 @@ namespace Sc2FarshStreamHelper
 
         private async void OnTimerTick(object sender, EventArgs e)
         {
+            sc2HostFetchTimer.Enabled = false;
             await Program.viewModel.UpdateCurrentGame();
+            updateBrowserPage();
+            sc2HostFetchTimer.Enabled = true;
         }
 
         private void onGameFinished(Sc2Game game)
