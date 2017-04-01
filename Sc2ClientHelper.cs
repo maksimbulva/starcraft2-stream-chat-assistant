@@ -32,6 +32,8 @@ namespace Sc2FarshStreamHelper
                 return null;
             }
 
+            sc2Game.SortPlayers();
+
             sc2Game.isInProgress = uiScreenList.ActiveScreens?.Count == 0
                 && !sc2Game.isReplay
                 && sc2Game.players.Count >= 2

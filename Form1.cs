@@ -14,7 +14,6 @@ namespace Sc2FarshStreamHelper
     {
         private uint winsCount_;
         private uint losesCount_;
-        private int? initialMmr_;
         private string htmlPage_;
 
         public FormOutput()
@@ -45,10 +44,9 @@ namespace Sc2FarshStreamHelper
 
         private void onGameFinished(Sc2Game game)
         {
-            var myPlayer = game.getMyPlayerInfo();
-            if (myPlayer != null)
+            if (game.MyPlayerInfo != null)
             {
-                if (game.getMyPlayerInfo().result.StartsWith(
+                if (game.MyPlayerInfo.result.StartsWith(
                     "V", StringComparison.InvariantCultureIgnoreCase))
                 {
                     ++winsCount_;
@@ -64,24 +62,6 @@ namespace Sc2FarshStreamHelper
         private void updateBrowserPage()
         {
             var viewModel = Program.viewModel;
-
-            // TODO - do some manipulation
-            var activeCharacter = Program.playerData.activeCharacter;
-            var activeLadder = Program.playerData.activeLadder;
-
-            //int? myMmr = null;
-            //if (activeCharacter != null && activeLadder != null)
-            //{
-            //    var ladderData = Program.ladderMgr.getLadderTeamData(activeCharacter.id,
-            //        activeLadder.ladder.ladderId);
-            //    myMmr = ladderData?.rating;
-            //}
-
-            //if (!initialMmr_.HasValue && myMmr.HasValue)
-            //{
-            //    initialMmr_ = myMmr;
-            //}
-
             var myMmr = viewModel.GetPlayerMmr(0);
 
             var curPage = htmlPage_

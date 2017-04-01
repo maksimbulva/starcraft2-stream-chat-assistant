@@ -15,35 +15,6 @@ namespace Sc2FarshStreamHelper
 
         private Sc2PlayerData data_;
 
-        public delegate void ActiveCharacterChangedEventHandler(Sc2Character character);
-        public event ActiveCharacterChangedEventHandler ActiveCharacterChanged;
-
-        public delegate void ActiveLadderChangedEventHandler(Sc2Character.LadderEntry activeLadder);
-        public event ActiveLadderChangedEventHandler ActiveLadderChanged;
-
-        private Sc2Character activeCharacter_;
-        public Sc2Character activeCharacter
-        {
-            get { return activeCharacter_; }
-            set
-            {
-                // TODO - check if the new value if differs from the current
-                activeCharacter_ = value;
-                ActiveCharacterChanged?.Invoke(activeCharacter_);
-            }
-        }
-
-        private Sc2Character.LadderEntry activeLadder_;
-        public Sc2Character.LadderEntry activeLadder
-        {
-            get { return activeLadder_; }
-            set
-            {
-                // TODO - check if the new value if differs from the current
-                activeLadder_ = value;
-                ActiveLadderChanged?.Invoke(activeLadder_);
-            }
-        }
 
         public async Task FetchPlayerDataAsync()
         {

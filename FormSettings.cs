@@ -21,15 +21,9 @@ namespace Sc2FarshStreamHelper
         {
             base.OnLoad(e);
 
-            Program.playerData.ActiveCharacterChanged += onActiveCharacterChanged;
-
             await Program.playerData.FetchPlayerDataAsync();
 
             readProfileInfo();
-        }
-
-        private async void onActiveCharacterChanged(Sc2Character character)
-        {
         }
 
         private void readProfileInfo()

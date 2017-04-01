@@ -26,20 +26,37 @@ namespace Sc2FarshStreamHelper
 
         public List<PlayerInfo> players { get; set; }
 
-        public PlayerInfo getMyPlayerInfo()
+        public PlayerInfo MyPlayerInfo
         {
-            if (players != null && players.Count > 0)
+            get
             {
-                return players.FirstOrDefault(x =>
-                    Program.playerData.GetPlayerCharacter(x.name) != null)
-                    ?? players[0];
+                if (players != null && players.Count > 0)
+                {
+                    return players.FirstOrDefault(x =>
+                        Program.playerData.GetPlayerCharacter(x.name) != null)
+                        ?? players[0];
+                }
+                return null;
             }
-            return null;
         }
 
         public PlayerInfo getOtherPlayerInfo(PlayerInfo player)
         {
             return players.FirstOrDefault(x => !ReferenceEquals(x, player));
+        }
+
+        public void SortPlayers()
+        {
+            if (players != null)
+            {
+                var myPlayer = MyPlayerInfo;
+                var index = players.FindIndex(x => ReferenceEquals(x, myPlayer));
+                if (index >= 0)
+                {
+                    players.RemoveAt(index);
+                    players.Insert(0, myPlayer);
+                }
+            }
         }
     }
 }
