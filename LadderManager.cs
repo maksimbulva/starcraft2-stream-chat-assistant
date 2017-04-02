@@ -92,16 +92,85 @@ namespace Sc2FarshStreamHelper
         public async Task<Sc2LadderTeamData> FetchLadderTeamDataAsync(ulong ladderId,
             ulong playerId, Sc2Race race)
         {
-            var ladderData = await NetworkHelper.FetchAsync<Sc2LadderData>(
-                string.Format(@"{0}/data/sc2/ladder/{1}?access_token={2}",
-                Program.battleNetUri, ladderId, Program.accessToken));
-
+            var ladderData = await FetchLadderAsync(ladderId);
             return ladderData.team?.Find(x => x.member.Exists(
                 y =>
                 {
                     return y.legacyLink != null && y.legacyLink.id == playerId
                         && y.Race == race;
                 }));
+        }
+
+        public static async Task<Sc2LadderData> FetchLadderAsync(ulong ladderId)
+        {
+            return await NetworkHelper.FetchAsync<Sc2LadderData>(
+                string.Format(@"{0}/data/sc2/ladder/{1}?access_token={2}",
+                Program.battleNetUri, ladderId, Program.accessToken));
+        }
+
+        public static async Task<bool> DiscoverLadder(ulong ladderId)
+        {
+            var database = Program.Database;
+            if (database == null)
+            {
+                return false;
+            }
+
+            var ladderData = await FetchLadderAsync(ladderId);
+            if (ladderData == null || ladderData.team == null)
+            {
+                return false;
+            }
+
+            var playersCollection = database.GetCollection<Model.Players>(
+                Model.playersCollectionName);
+
+            foreach (var team in ladderData.team)
+            {
+                team.member.ForEach(x =>
+                {
+                    if (!playersCollection.Exists(y => y.Id == x.legacyLink.id))
+                    {
+                        playersCollection.Insert(new Model.Players()
+                        {
+                            Id = x.legacyLink.id,
+                            DisplayName = x.legacyLink.DisplayName,
+                            ProfilePath = x.legacyLink.profilePath,
+                        });
+                    }
+                });
+            }
+
+            return true;
+        }
+
+        public static async Task<List<Sc2LadderId>> FetchLaddersAsync(string profilePath,
+            string matchmakingQueue)
+        {
+            if (profilePath[0] != '/')
+            {
+                profilePath = "/" + profilePath;
+            }
+
+            var ladders = await NetworkHelper.FetchAsync<Sc2Character.LaddersList>(
+                string.Format("{0}/sc2{1}/ladders?apikey={2}",
+                    Program.battleNetUri, profilePath, Program.apiKey));
+
+            var result = new List<Sc2LadderId>();
+
+            ladders?.currentSeason.Select(x =>
+                x.ladder != null && x.ladder.Count > 0
+                && x.ladder[0].matchMakingQueue == matchmakingQueue
+                ? x.ladder[0] : null).ToList().ForEach(
+                x =>
+                {
+                    if (x != null)
+                    {
+                        result.Add(x);
+                    }
+                });
+
+            return result;
         }
     }
 }

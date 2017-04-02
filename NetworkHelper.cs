@@ -16,10 +16,10 @@ namespace Sc2FarshStreamHelper
                 var strData = await Program.httpClient.GetStringAsync(requestUri);
                 return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(strData);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // TODO
-                throw;
+                return default(T);
             }
         }
     }

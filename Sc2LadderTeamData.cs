@@ -45,6 +45,12 @@ namespace Sc2FarshStreamHelper
             public ulong id { get; set; }
             public int realm { get; set; }
             public string name { get; set; }
+            [JsonProperty("path")]
+            public string profilePath { get; set; }
+            public string DisplayName
+            {
+                get { return name?.Split(new char[] { '#' })[0]; }
+            }
         }
 
         public ulong id { get; set; }

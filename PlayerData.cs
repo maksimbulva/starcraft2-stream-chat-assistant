@@ -22,7 +22,7 @@ namespace Sc2FarshStreamHelper
                 $"{Program.battleNetUri}/sc2/profile/user?access_token={Program.oauthToken}");
         }
 
-        public async Task<long?> FetchPlayerMmrAsync(string displayName, Sc2Race race)
+        public async Task<long?> FetchLocalPlayerMmrAsync(string displayName, Sc2Race race)
         {
             var character = GetPlayerCharacter(displayName);
             if (character == null)
@@ -30,24 +30,10 @@ namespace Sc2FarshStreamHelper
                 return null;
             }
 
-            var ladders = await NetworkHelper.FetchAsync<Sc2Character.LaddersList>(
-                string.Format("{0}/sc2/profile/{1}/{2}/{3}/ladders?apikey={4}",
-                    Program.battleNetUri, character.id, character.realm,
-                    character.displayName, Program.apiKey));
-
-            var laddersSolo = new List<Sc2LadderId>();
-
-            ladders.currentSeason.Select(x =>
-                x.ladder != null && x.ladder.Count > 0
-                && x.ladder[0].matchMakingQueue == "LOTV_SOLO"
-                ? x.ladder[0] : null).ToList().ForEach(
-                x =>
-                {
-                    if (x != null)
-                    {
-                        laddersSolo.Add(x);
-                    }
-                });
+            var laddersSolo = await LadderManager.FetchLaddersAsync(
+                string.Format("/profile/{0}/{1}/{2}", character.id,
+                    character.realm, character.displayName),
+                "LOTV_SOLO");
 
             foreach (var ladderId in laddersSolo)
             {

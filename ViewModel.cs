@@ -50,26 +50,49 @@ namespace Sc2FarshStreamHelper
                 GameFinished?.Invoke(currentGame);
             }
 
-            var playerName = GetPlayerName(0);
-            var playerRace = GetPlayerRace(0);
-            if (playerName != null)
+            for (int playerIndex = 0; playerIndex < 2; ++playerIndex)
             {
-                long? mmr = await Program.playerData.FetchPlayerMmrAsync(playerName,
-                    playerRace);
-                if (mmr.HasValue)
+                var playerName = GetPlayerName(playerIndex);
+                if (playerName != null)
                 {
-                    var key = MakeMmrDictionaryKey(playerName, playerRace);
-                    if (playerMmrs_.TryGetValue(key, out PlayerMmr playerMmr))
+                    var playerRace = GetPlayerRace(0);
+                    // Check if the player is the local player
+                    long? mmr = await Program.playerData.FetchLocalPlayerMmrAsync(
+                        playerName, playerRace);
+                    if (!mmr.HasValue)
                     {
-                        playerMmr.currentMmr = mmr.Value;
-                    }
-                    else
-                    {
-                        playerMmrs_.Add(key, new PlayerMmr()
+                        // Find player name in database
+                        var database = Program.Database;
+                        var playersCollection = database?.GetCollection<Model.Players>(
+                            Model.playersCollectionName);
+                        if (playersCollection != null)
                         {
-                            currentMmr = mmr.Value,
-                            initialMmr = mmr.Value
-                        });
+                            // TODO
+                            foreach (var p in
+                                playersCollection?.Find(x => x.DisplayName == "Pollen" /*playerName*/))
+                            {
+                                if (p != null)
+                                {
+
+                                }
+                            }
+                        }
+                    }
+                    if (mmr.HasValue)
+                    {
+                        var key = MakeMmrDictionaryKey(playerName, playerRace);
+                        if (playerMmrs_.TryGetValue(key, out PlayerMmr playerMmr))
+                        {
+                            playerMmr.currentMmr = mmr.Value;
+                        }
+                        else
+                        {
+                            playerMmrs_.Add(key, new PlayerMmr()
+                            {
+                                currentMmr = mmr.Value,
+                                initialMmr = mmr.Value
+                            });
+                        }
                     }
                 }
             }

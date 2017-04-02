@@ -21,6 +21,8 @@ namespace Sc2FarshStreamHelper
         {
             base.OnLoad(e);
 
+            UpdatePlayersInDatabaseCounter();
+
             await Program.playerData.FetchPlayerDataAsync();
 
             readProfileInfo();
@@ -32,9 +34,31 @@ namespace Sc2FarshStreamHelper
             (new FormOutput()).Show();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
-            (new FormOutput()).Show();
+            ulong ladderIdBegin = 187298;
+            ulong ladderIdEnd = 200000;
+            for (ulong ladderId = ladderIdBegin; ladderId < ladderIdEnd;
+                ++ladderId)
+            {
+                lblLaddersDiscovered.Text = string.Format(
+                    "Ladders discovered: {0} / {1}",
+                    ladderId - ladderIdBegin, ladderIdEnd - ladderIdBegin + 1);
+                await LadderManager.DiscoverLadder(ladderId);
+                UpdatePlayersInDatabaseCounter();
+                // Respect the battle.net requests per second limit
+                await Task.Delay(20);
+            }
+        }
+
+        private void UpdatePlayersInDatabaseCounter()
+        {
+            var playersCollection = Program.Database?.GetCollection<Model.Players>(
+                Model.playersCollectionName);
+            lblPlayersInDatabase.Text = "Players in database: "
+                + (playersCollection != null
+                ? playersCollection.LongCount().ToString()
+                : "0");
         }
     }
 }

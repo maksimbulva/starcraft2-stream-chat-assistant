@@ -66,6 +66,7 @@
       <DependentUpon>FormSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="LadderManager.cs" />
+    <Compile Include="Model.cs" />
     <Compile Include="NetworkHelper.cs" />
     <Compile Include="PlayerData.cs" />
     <Compile Include="Program.cs" />
