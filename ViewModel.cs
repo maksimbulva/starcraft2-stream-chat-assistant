@@ -55,7 +55,7 @@ namespace Sc2FarshStreamHelper
                 var playerName = GetPlayerName(playerIndex);
                 if (playerName != null)
                 {
-                    var playerRace = GetPlayerRace(0);
+                    Sc2Race playerRace = GetPlayerRace(0);
                     // Check if the player is the local player
                     long? mmr = await Program.playerData.FetchLocalPlayerMmrAsync(
                         playerName, playerRace);
@@ -71,7 +71,9 @@ namespace Sc2FarshStreamHelper
                             foreach (var p in
                                 playersCollection?.Find(x => x.DisplayName == "Pollen" /*playerName*/))
                             {
-                                if (p != null)
+                                var mmrCandidate = await LadderManager.FetchPlayerMmrAsync(
+                                    p.ProfilePath, "LOTV_SOLO", playerRace);
+                                if (mmrCandidate.HasValue)
                                 {
 
                                 }

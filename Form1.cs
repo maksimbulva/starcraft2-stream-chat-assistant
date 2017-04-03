@@ -22,7 +22,6 @@ namespace Sc2FarshStreamHelper
 
             htmlPage_ = System.IO.File.ReadAllText("output.html");
 
-            Program.ladderMgr.DataUpdated += _ => updateBrowserPage();
             Program.viewModel.GameFinished += onGameFinished;
         }
 

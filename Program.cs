@@ -58,9 +58,9 @@ namespace Sc2FarshStreamHelper
                 {
                     httpClient_ = new WeakReference<HttpClient>(httpClient);
 
-                    oauthToken = @"";
-                    accessToken = @"";
-                    apiKey = @"";
+                    oauthToken = @"sthbd9wz279hw8gx43u5cv2j";
+                    accessToken = @"dm54544hvw5kjunagysdax86";
+                    apiKey = @"jfqepr6us2a6hbsg5wsmtpnqap9rg7h5";
 
                     playerData = new PlayerData();
                     ladderMgr = new LadderManager();

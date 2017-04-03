@@ -9,48 +9,6 @@ namespace Sc2FarshStreamHelper
 {
     class LadderManager
     {
-        public class LadderEntryId
-        {
-            public ulong playerId;
-            public ulong ladderId;
-
-            public override bool Equals(object obj)
-            {
-                var rhs = obj as LadderEntryId;
-                if (rhs != null)
-                {
-                    return playerId == rhs.playerId && ladderId == rhs.ladderId;
-                }
-                return base.Equals(obj);
-            }
-
-            public override int GetHashCode()
-            {
-                return playerId.GetHashCode() ^ ladderId.GetHashCode();
-            }
-        }
-
-        public delegate void DataUpdatedEventHandler(LadderManager sender);
-        public event DataUpdatedEventHandler DataUpdated;
-
-        public Dictionary<LadderEntryId, Sc2LadderTeamData> entries { get; private set; }
-
-        public LadderManager()
-        {
-            entries = new Dictionary<LadderEntryId, Sc2LadderTeamData>();
-        }
-
-        public Sc2LadderTeamData getLadderTeamData(ulong playerId, ulong ladderId)
-        {
-            Sc2LadderTeamData result;
-            entries.TryGetValue(new LadderEntryId()
-            {
-                playerId = playerId,
-                ladderId = ladderId
-            }, out result);
-            return result;
-        }
-
         //public async Task updateLadder(ulong ladderId, Predicate<Sc2LadderTeamData> filter)
         //{
         //    var request = new RestRequest("data/sc2/ladder/" + ladderId, Method.GET);
@@ -90,13 +48,13 @@ namespace Sc2FarshStreamHelper
         //}
 
         public async Task<Sc2LadderTeamData> FetchLadderTeamDataAsync(ulong ladderId,
-            ulong playerId, Sc2Race race)
+            string profilePath, Sc2Race race)
         {
             var ladderData = await FetchLadderAsync(ladderId);
-            return ladderData.team?.Find(x => x.member.Exists(
+            return ladderData?.team?.Find(x => x.member.Exists(
                 y =>
                 {
-                    return y.legacyLink != null && y.legacyLink.id == playerId
+                    return y.legacyLink != null && y.legacyLink.profilePath == profilePath
                         && y.Race == race;
                 }));
         }
@@ -171,6 +129,26 @@ namespace Sc2FarshStreamHelper
                 });
 
             return result;
+        }
+
+        public static async Task<long?> FetchPlayerMmrAsync(string profilePath,
+            string matchmakingQueue, Sc2Race race)
+        {
+            var laddersSolo = await LadderManager.FetchLaddersAsync(
+                profilePath, matchmakingQueue);
+
+            foreach (var ladderId in laddersSolo)
+            {
+                // TODO
+                var ladderData = await Program.ladderMgr.FetchLadderTeamDataAsync(
+                    ladderId.ladderId, profilePath, race);
+                if (ladderData != null)
+                {
+                    return ladderData.rating;
+                }
+            }
+
+            return null;
         }
     }
 }

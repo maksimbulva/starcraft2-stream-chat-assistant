@@ -23,5 +23,12 @@ namespace Sc2FarshStreamHelper
         public int realm { get; set; }
         public string displayName { get; set; }
         public LaddersList ladders { get; set; }
+        public string ProfilePath
+        {
+            get
+            {
+                return $"/profile/{id}/{realm}/{displayName}";
+            }
+        }
     }
 }

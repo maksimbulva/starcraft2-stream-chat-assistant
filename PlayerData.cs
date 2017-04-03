@@ -30,23 +30,8 @@ namespace Sc2FarshStreamHelper
                 return null;
             }
 
-            var laddersSolo = await LadderManager.FetchLaddersAsync(
-                string.Format("/profile/{0}/{1}/{2}", character.id,
-                    character.realm, character.displayName),
-                "LOTV_SOLO");
-
-            foreach (var ladderId in laddersSolo)
-            {
-                // TODO
-                var ladderData = await Program.ladderMgr.FetchLadderTeamDataAsync(
-                    ladderId.ladderId, character.id, Sc2Race.Protoss);
-                if (ladderData != null)
-                {
-                    return ladderData.rating;
-                }
-            }
-
-            return null;
+            return await LadderManager.FetchPlayerMmrAsync(character.ProfilePath,
+                "LOTV_SOLO", race);
         }
 
         public Sc2Character GetPlayerCharacter(string displayName)
