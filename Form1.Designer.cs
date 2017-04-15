@@ -1,4 +1,4 @@
-﻿namespace Sc2FarshStreamHelper
+﻿namespace Sc2StreamChatAssistant
 {
     partial class FormOutput
     {
@@ -35,7 +35,6 @@
             // 
             // sc2HostFetchTimer
             // 
-            this.sc2HostFetchTimer.Enabled = true;
             this.sc2HostFetchTimer.Interval = 2000;
             this.sc2HostFetchTimer.Tick += new System.EventHandler(this.OnTimerTick);
             // 

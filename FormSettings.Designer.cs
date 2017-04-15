@@ -1,4 +1,4 @@
-﻿namespace Sc2FarshStreamHelper
+﻿namespace Sc2StreamChatAssistant
 {
     partial class FormSettings
     {

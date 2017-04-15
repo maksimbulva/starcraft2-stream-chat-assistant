@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sc2FarshStreamHelper.Properties
+namespace Sc2StreamChatAssistant.Properties
 {
 
 

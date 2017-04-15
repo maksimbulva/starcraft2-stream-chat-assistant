@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Sc2FarshStreamHelper
+namespace Sc2StreamChatAssistant
 {
     public partial class FormSettings : Form
     {

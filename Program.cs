@@ -5,12 +5,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Sc2FarshStreamHelper
+namespace Sc2StreamChatAssistant
 {
     static class Program
     {
         public static PlayerData playerData { get; private set; }
-        public static LadderManager ladderMgr { get; private set; }
 
         public static ViewModel viewModel { get; private set; }
 
@@ -58,13 +57,11 @@ namespace Sc2FarshStreamHelper
                 {
                     httpClient_ = new WeakReference<HttpClient>(httpClient);
 
-                    oauthToken = @"sthbd9wz279hw8gx43u5cv2j";
-                    accessToken = @"dm54544hvw5kjunagysdax86";
-                    apiKey = @"jfqepr6us2a6hbsg5wsmtpnqap9rg7h5";
+                    oauthToken = @"";
+                    accessToken = @"";
+                    apiKey = @"";
 
                     playerData = new PlayerData();
-                    ladderMgr = new LadderManager();
-
                     viewModel = new ViewModel();
 
                     Application.EnableVisualStyles();

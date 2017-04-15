@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Sc2FarshStreamHelper
+namespace Sc2StreamChatAssistant
 {
     class Sc2ClientHelper
     {
@@ -14,7 +14,7 @@ namespace Sc2FarshStreamHelper
             public List<string> ActiveScreens { get; set; }
         }
 
-        public async Task<Sc2Game> FetchCurrentGame()
+        public async Task<Sc2Game> FetchCurrentGameAsync()
         {
             var uiScreenList = await NetworkHelper.FetchAsync<Sc2UiScreenList>(
                 "http://127.0.0.1:6120/ui");

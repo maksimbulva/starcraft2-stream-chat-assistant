@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace Sc2FarshStreamHelper
+namespace Sc2StreamChatAssistant
 {
-    class LadderManager
+    static class LadderManager
     {
         //public async Task updateLadder(ulong ladderId, Predicate<Sc2LadderTeamData> filter)
         //{
@@ -47,8 +47,8 @@ namespace Sc2FarshStreamHelper
         //    // TODO
         //}
 
-        public async Task<Sc2LadderTeamData> FetchLadderTeamDataAsync(ulong ladderId,
-            string profilePath, Sc2Race race)
+        public static async Task<Sc2LadderTeamData> FetchLadderTeamDataAsync(
+            ulong ladderId, string profilePath, Sc2Race race)
         {
             var ladderData = await FetchLadderAsync(ladderId);
             return ladderData?.team?.Find(x => x.member.Exists(
@@ -134,13 +134,13 @@ namespace Sc2FarshStreamHelper
         public static async Task<long?> FetchPlayerMmrAsync(string profilePath,
             string matchmakingQueue, Sc2Race race)
         {
-            var laddersSolo = await LadderManager.FetchLaddersAsync(
+            var laddersSolo = await FetchLaddersAsync(
                 profilePath, matchmakingQueue);
 
             foreach (var ladderId in laddersSolo)
             {
                 // TODO
-                var ladderData = await Program.ladderMgr.FetchLadderTeamDataAsync(
+                var ladderData = await LadderManager.FetchLadderTeamDataAsync(
                     ladderId.ladderId, profilePath, race);
                 if (ladderData != null)
                 {

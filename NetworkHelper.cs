@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Sc2FarshStreamHelper
+namespace Sc2StreamChatAssistant
 {
     static class NetworkHelper
     {
