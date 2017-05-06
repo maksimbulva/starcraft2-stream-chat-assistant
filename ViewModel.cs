@@ -65,39 +65,7 @@ namespace Sc2StreamChatAssistant
                 }
 
                 Sc2Race playerRace = GetPlayerRace(playerIndex);
-                // Check if the player is the local player
-                long? mmr = await Program.playerData.FetchLocalPlayerMmrAsync(
-                    playerName, playerRace);
-
-                if (!mmr.HasValue)
-                {
-                    // Find player name in database
-                    var database = Program.Database;
-                    var playersCollection = database?.GetCollection<Model.Players>(
-                        Model.playersCollectionName);
-                    if (playersCollection != null)
-                    {
-                        var mmrCandidates = new List<long>();
-                        foreach (var p in
-                            playersCollection?.Find(x => x.DisplayName == playerName,
-                                limit: 10))
-                        {
-                            var mmrCandidate = await LadderManager.FetchPlayerMmrAsync(
-                                p.ProfilePath, "LOTV_SOLO", playerRace);
-                            if (mmrCandidate.HasValue)
-                            {
-                                mmrCandidates.Add(mmrCandidate.Value);
-                            }
-                        }
-                        if (mmrCandidates.Count > 0)
-                        {
-                            mmrCandidates.Sort((lhs, rhs) =>
-                                Math.Abs(lhs - expectedMmr).CompareTo(Math.Abs(rhs - expectedMmr)));
-                            mmr = mmrCandidates[0];
-                        }
-                    }
-                }
-
+                long? mmr = await LadderManager.FetchPlayerMmrAsync(playerName);
                 if (mmr.HasValue)
                 {
                     if (playerIndex == 0)

@@ -131,6 +131,12 @@ namespace Sc2StreamChatAssistant
             return result;
         }
 
+        public static async Task<long?> FetchPlayerMmrAsync(string displayName)
+        {
+            // TODO
+            return 3000;
+        }
+
         public static async Task<long?> FetchPlayerMmrAsync(string profilePath,
             string matchmakingQueue, Sc2Race race)
         {

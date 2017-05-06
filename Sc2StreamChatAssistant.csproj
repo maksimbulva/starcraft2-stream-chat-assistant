@@ -75,7 +75,6 @@
     <Compile Include="LadderManager.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="NetworkHelper.cs" />
-    <Compile Include="PlayerData.cs" />
     <Compile Include="PlayersList.cs">
       <SubType>UserControl</SubType>
     </Compile>

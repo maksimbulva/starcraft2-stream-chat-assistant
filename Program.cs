@@ -15,8 +15,6 @@ namespace Sc2StreamChatAssistant
         public static List<Sc2PlayerData> PlayerProfiles { get; private set; }
         public static List<Sc2PlayerData> FriendsProfiles { get; private set; }
 
-        public static PlayerData playerData { get; private set; }
-
         public static ViewModel viewModel { get; private set; }
 
         public static string oauthToken { get; private set; }
@@ -81,7 +79,6 @@ namespace Sc2StreamChatAssistant
                     accessToken = @"";
                     apiKey = @"";
 
-                    playerData = new PlayerData();
                     viewModel = new ViewModel();
 
                     Application.EnableVisualStyles();

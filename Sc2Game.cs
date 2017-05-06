@@ -33,7 +33,7 @@ namespace Sc2StreamChatAssistant
                 if (players != null && players.Count > 0)
                 {
                     return players.FirstOrDefault(x =>
-                        Program.playerData.GetPlayerCharacter(x.name) != null)
+                        Program.PlayerProfiles.Find(y => y.DisplayName == x.name) != null)
                         ?? players[0];
                 }
                 return null;

@@ -29,7 +29,7 @@ namespace Sc2StreamChatAssistant
 
             Program.sc2ClientHelper.Sc2ClientConntectionChanged += OnSc2ClientConntectionChanged;
 
-            await Program.playerData.FetchPlayerDataAsync();
+            //await Program.playerData.FetchPlayerDataAsync();
 
             readProfileInfo();
         }
