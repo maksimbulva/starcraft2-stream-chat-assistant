@@ -66,42 +66,6 @@ namespace Sc2StreamChatAssistant
                 Program.battleNetUri, ladderId, Program.accessToken));
         }
 
-        public static async Task<bool> DiscoverLadder(ulong ladderId)
-        {
-            var database = Program.Database;
-            if (database == null)
-            {
-                return false;
-            }
-
-            var ladderData = await FetchLadderAsync(ladderId);
-            if (ladderData == null || ladderData.team == null)
-            {
-                return false;
-            }
-
-            var playersCollection = database.GetCollection<Model.Players>(
-                Model.playersCollectionName);
-
-            foreach (var team in ladderData.team)
-            {
-                team.member.ForEach(x =>
-                {
-                    if (!playersCollection.Exists(y => y.Id == x.legacyLink.id))
-                    {
-                        playersCollection.Insert(new Model.Players()
-                        {
-                            Id = x.legacyLink.id,
-                            DisplayName = x.legacyLink.DisplayName,
-                            ProfilePath = x.legacyLink.profilePath,
-                        });
-                    }
-                });
-            }
-
-            return true;
-        }
-
         public static async Task<List<Sc2LadderId>> FetchLaddersAsync(string profilePath,
             string matchmakingQueue)
         {

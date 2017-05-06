@@ -25,16 +25,6 @@ namespace Sc2StreamChatAssistant
 
         public static Sc2ClientHelper sc2ClientHelper;
 
-        private static WeakReference<LiteDB.LiteDatabase> database_;
-        public static LiteDB.LiteDatabase Database
-        {
-            get
-            {
-                database_.TryGetTarget(out LiteDB.LiteDatabase result);
-                return result;
-            }
-        }
-
         private static WeakReference<HttpClient> httpClient_;
         public static HttpClient httpClient
         {
@@ -68,24 +58,20 @@ namespace Sc2StreamChatAssistant
             // TODO
             FriendsProfiles = new List<Sc2PlayerData>();
 
-            using (var db = new LiteDB.LiteDatabase(@"data.db"))
+            using (var httpClient = new HttpClient())
             {
-                database_ = new WeakReference<LiteDB.LiteDatabase>(db);
-                using (var httpClient = new HttpClient())
-                {
-                    httpClient_ = new WeakReference<HttpClient>(httpClient);
+                httpClient_ = new WeakReference<HttpClient>(httpClient);
 
-                    oauthToken = @"";
-                    accessToken = @"";
-                    apiKey = @"";
+                oauthToken = @"";
+                accessToken = @"";
+                apiKey = @"";
 
-                    viewModel = new ViewModel();
+                viewModel = new ViewModel();
 
-                    Application.EnableVisualStyles();
-                    Application.SetCompatibleTextRenderingDefault(false);
-                    // formOutput = new FormOutput();
-                    Application.Run(new FormSettings());
-                }
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                // formOutput = new FormOutput();
+                Application.Run(new FormSettings());
             }
         }
 
