@@ -15,13 +15,19 @@ namespace Sc2StreamChatAssistant
         public FormSettings()
         {
             InitializeComponent();
+
+            Sc2ClientPortSelector.Value = Program.sc2ClientHelper.port;
+            OnSc2ClientConntectionChanged(false);
+
+            InitProfilesList(playersList1, Program.PlayerProfiles);
+            InitProfilesList(playersList2, Program.FriendsProfiles);
         }
 
         protected override async void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
-            UpdatePlayersInDatabaseCounter();
+            Program.sc2ClientHelper.Sc2ClientConntectionChanged += OnSc2ClientConntectionChanged;
 
             await Program.playerData.FetchPlayerDataAsync();
 
@@ -34,31 +40,38 @@ namespace Sc2StreamChatAssistant
             (new FormOutput()).Show();
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private void OnSc2ClientConntectionChanged(bool isConnected)
         {
-            ulong ladderIdBegin = 187298;
-            ulong ladderIdEnd = 200000;
-            for (ulong ladderId = ladderIdBegin; ladderId < ladderIdEnd;
-                ++ladderId)
+            if (isConnected)
             {
-                lblLaddersDiscovered.Text = string.Format(
-                    "Ladders discovered: {0} / {1}",
-                    ladderId - ladderIdBegin, ladderIdEnd - ladderIdBegin + 1);
-                await LadderManager.DiscoverLadder(ladderId);
-                UpdatePlayersInDatabaseCounter();
-                // Respect the battle.net requests per second limit
-                await Task.Delay(20);
+                LblConnectionToSc2.Text = "Connected";
+                LblConnectionToSc2.ForeColor = Color.ForestGreen;
+            }
+            else
+            {
+                LblConnectionToSc2.Text = "Not connected";
+                LblConnectionToSc2.ForeColor = Color.DarkRed;
             }
         }
 
-        private void UpdatePlayersInDatabaseCounter()
+        private void OnSc2ClientPortSelectorValueChanged(object sender, EventArgs e)
         {
-            var playersCollection = Program.Database?.GetCollection<Model.Players>(
-                Model.playersCollectionName);
-            lblPlayersInDatabase.Text = "Players in database: "
-                + (playersCollection != null
-                ? playersCollection.LongCount().ToString()
-                : "0");
+            Program.sc2ClientHelper.port = (ushort)Sc2ClientPortSelector.Value;
+        }
+
+        private void OnFormClosing(object sender, FormClosingEventArgs e)
+        {
+            Program.SaveSettings();
+        }
+
+        private void InitProfilesList(PlayersList control, List<Sc2PlayerData> playerData)
+        {
+            control.SetPlayerProfiles(playerData);
+            control.ProfilesCollectionChanged += profiles =>
+            {
+                playerData.Clear();
+                playerData.AddRange(profiles);
+            };
         }
     }
 }

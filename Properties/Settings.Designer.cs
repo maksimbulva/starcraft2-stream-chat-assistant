@@ -8,22 +8,64 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sc2StreamChatAssistant.Properties
-{
-
-
+namespace Sc2FarshStreamHelper.Properties {
+    
+    
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
-    {
-
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.1.0.0")]
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+        
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-
-        public static Settings Default
-        {
-            get
-            {
+        
+        public static Settings Default {
+            get {
                 return defaultInstance;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://5.101.121.112")]
+        public string ServerUri {
+            get {
+                return ((string)(this["ServerUri"]));
+            }
+            set {
+                this["ServerUri"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection PlayerProfiles {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["PlayerProfiles"]));
+            }
+            set {
+                this["PlayerProfiles"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection FrinedsProfiles {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["FrinedsProfiles"]));
+            }
+            set {
+                this["FrinedsProfiles"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("6120")]
+        public ushort Sc2ClientPort {
+            get {
+                return ((ushort)(this["Sc2ClientPort"]));
+            }
+            set {
+                this["Sc2ClientPort"] = value;
             }
         }
     }

@@ -9,15 +9,41 @@ namespace Sc2StreamChatAssistant
 {
     class Sc2ClientHelper
     {
+        public delegate void Sc2ClientConntectionChangedEventHandler(bool value);
+        public event Sc2ClientConntectionChangedEventHandler Sc2ClientConntectionChanged;
+
         private class Sc2UiScreenList
         {
             public List<string> ActiveScreens { get; set; }
         }
 
+        private bool isConnected_;
+        public bool IsConnected
+        {
+            get { return isConnected_; }
+            set
+            {
+                if (isConnected_ != value)
+                {
+                    isConnected_ = value;
+                    Sc2ClientConntectionChanged?.Invoke(value);
+                }
+            }
+        }
+
+        public ushort port;
+
+        public Sc2ClientHelper(ushort port)
+        {
+            this.port = port;
+        }
+
         public async Task<Sc2Game> FetchCurrentGameAsync()
         {
             var uiScreenList = await NetworkHelper.FetchAsync<Sc2UiScreenList>(
-                "http://127.0.0.1:6120/ui");
+                $"http://127.0.0.1:{port}/ui");
+
+            IsConnected = (uiScreenList != null);
 
             if (uiScreenList == null)
             {
@@ -25,7 +51,7 @@ namespace Sc2StreamChatAssistant
             }
 
             var sc2Game = await NetworkHelper.FetchAsync<Sc2Game>(
-                "http://127.0.0.1:6120/game");
+                $"http://127.0.0.1:{port}/game");
 
             if (sc2Game == null || sc2Game.players == null)
             {

@@ -117,7 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="textBox1.Text" xml:space="preserve">
-    <value>If more than one of you characters share the same name (even though clan tags differ), the App cannot distinct between them and all except one of such characters are marked inactive. If your current character was marked inactive, please put her on top of the list to make her active.</value>
-  </data>
 </root>
