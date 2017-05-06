@@ -164,7 +164,7 @@ namespace Sc2StreamChatAssistant
 
         private void OnGameFinished(Sc2Game game)
         {
-            if (game.MyPlayerInfo != null)
+            if (game.MyPlayerInfo != null && !game.isReplay)
             {
                 if (game.MyPlayerInfo.result.StartsWith(
                     "V", StringComparison.InvariantCultureIgnoreCase))
