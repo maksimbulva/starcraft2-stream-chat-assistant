@@ -79,12 +79,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sc2Character.cs" />
     <Compile Include="Sc2ClientHelper.cs" />
     <Compile Include="Sc2Game.cs" />
-    <Compile Include="Sc2LadderData.cs" />
-    <Compile Include="Sc2LadderId.cs" />
-    <Compile Include="Sc2LadderTeamData.cs" />
     <Compile Include="Sc2PlayerData.cs" />
     <Compile Include="Sc2Race.cs" />
     <Compile Include="ViewModel.cs" />

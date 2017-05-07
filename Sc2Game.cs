@@ -19,7 +19,7 @@ namespace Sc2StreamChatAssistant
             public string result { get; set; }
         }
 
-        private const string GameResultUndecided = "Undecided";
+        public const string GameResultUndecided = "Undecided";
 
         public bool isReplay { get; set; }
         public bool isInProgress { get; set; }

@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Sc2StreamChatAssistant
@@ -16,27 +11,18 @@ namespace Sc2StreamChatAssistant
         {
             InitializeComponent();
 
-            Sc2ClientPortSelector.Value = Program.Sc2ClientHelper.port;
+            Sc2ClientPortSelector.Value = Program.Sc2ClientHelper.NetworkPort;
             OnSc2ClientConntectionChanged(false);
 
             InitProfilesList(playersList1, Program.PlayerProfiles);
             InitProfilesList(playersList2, Program.FriendsProfiles);
         }
 
-        protected override async void OnLoad(EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
             Program.Sc2ClientHelper.Sc2ClientConntectionChanged += OnSc2ClientConntectionChanged;
-
-            //await Program.playerData.FetchPlayerDataAsync();
-
-            readProfileInfo();
-        }
-
-        private void readProfileInfo()
-        {
-            // TODO
             (new FormOutput()).Show();
         }
 
@@ -56,7 +42,7 @@ namespace Sc2StreamChatAssistant
 
         private void OnSc2ClientPortSelectorValueChanged(object sender, EventArgs e)
         {
-            Program.Sc2ClientHelper.port = (ushort)Sc2ClientPortSelector.Value;
+            Program.Sc2ClientHelper.NetworkPort = (ushort)Sc2ClientPortSelector.Value;
         }
 
         private void OnFormClosing(object sender, FormClosingEventArgs e)

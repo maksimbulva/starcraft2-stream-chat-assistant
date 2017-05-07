@@ -52,12 +52,10 @@ namespace Sc2StreamChatAssistant
                 return;
             }
 
-            long charactedId;
-            int realm;
             var parsed = url.Substring(pos + "profile/".Length).Split(new char[] { '/' });
             if (parsed.Length < 3
-                || !long.TryParse(parsed[0], out charactedId)
-                || !int.TryParse(parsed[1], out realm)
+                || !long.TryParse(parsed[0], out long charactedId)
+                || !int.TryParse(parsed[1], out int realm)
                 || string.IsNullOrWhiteSpace(parsed[2]))
             {
                 ShowErrorMessage("The provided url is not in correct format");
@@ -106,10 +104,12 @@ namespace Sc2StreamChatAssistant
                 if (isMoveToTop)
                 {
                     listOfPlayers.Items.Insert(0, selectedPlayer);
+                    listOfPlayers.SelectedIndex = 0;
                 }
                 else
                 {
                     listOfPlayers.Items.Add(selectedPlayer);
+                    listOfPlayers.SelectedIndex = listOfPlayers.Items.Count - 1;
                 }
                 NotifyProfilesCollectionChanged();
             }
@@ -117,8 +117,16 @@ namespace Sc2StreamChatAssistant
 
         private void OnRemoveClick(object sender, EventArgs e)
         {
-            // TODO
-            NotifyProfilesCollectionChanged();
+            if (listOfPlayers.SelectedItem != null)
+            {
+                int selectedIndex = listOfPlayers.SelectedIndex;
+                listOfPlayers.Items.RemoveAt(selectedIndex);
+                if (listOfPlayers.Items.Count > selectedIndex)
+                {
+                    listOfPlayers.SelectedIndex = selectedIndex;
+                }
+                NotifyProfilesCollectionChanged();
+            }
         }
 
         private void NotifyProfilesCollectionChanged()

@@ -9,7 +9,7 @@ namespace Sc2StreamChatAssistant
         {
             try
             {
-                var strData = await Program.httpClient.GetStringAsync(requestUri);
+                var strData = await Program.HttpClient.GetStringAsync(requestUri);
                 return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(strData);
             }
             catch (Exception)

@@ -29,14 +29,14 @@ namespace Sc2StreamChatAssistant
         private async void OnTimerTick(object sender, EventArgs e)
         {
             sc2HostFetchTimer.Enabled = false;
-            await Program.viewModel.UpdateCurrentGameAsync();
+            await Program.ViewModel.UpdateCurrentGameAsync();
             updateBrowserPage();
             sc2HostFetchTimer.Enabled = true;
         }
 
         private void updateBrowserPage()
         {
-            var viewModel = Program.viewModel;
+            var viewModel = Program.ViewModel;
             var myMmr = viewModel.GetPlayerMmr(0);
             var theirMmr = viewModel.GetPlayerMmr(1);
 

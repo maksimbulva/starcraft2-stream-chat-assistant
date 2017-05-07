@@ -16,14 +16,14 @@ namespace Sc2StreamChatAssistant
 
         public static string RecentSc2Region { get; set; }
 
-        public static ViewModel viewModel { get; private set; }
+        public static ViewModel ViewModel { get; private set; }
 
         public static Uri ServerUri { get; private set; }
 
         public static Sc2ClientHelper Sc2ClientHelper { get; private set; }
 
         private static WeakReference<HttpClient> httpClient_;
-        public static HttpClient httpClient
+        public static HttpClient HttpClient
         {
             get
             {
@@ -55,7 +55,7 @@ namespace Sc2StreamChatAssistant
             {
                 httpClient_ = new WeakReference<HttpClient>(httpClient);
 
-                viewModel = new ViewModel();
+                ViewModel = new ViewModel();
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
@@ -65,7 +65,7 @@ namespace Sc2StreamChatAssistant
 
         public static void SaveSettings()
         {
-            Settings.Default.Sc2ClientPort = Sc2ClientHelper.port;
+            Settings.Default.Sc2ClientPort = Sc2ClientHelper.NetworkPort;
             Settings.Default.PlayerProfiles = new StringCollection();
             Settings.Default.PlayerProfiles.AddRange(
                 SerializePlayerProfiles(PlayerProfiles).ToArray());

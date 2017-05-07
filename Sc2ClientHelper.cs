@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Sc2StreamChatAssistant
 {
@@ -31,17 +28,17 @@ namespace Sc2StreamChatAssistant
             }
         }
 
-        public ushort port;
+        public ushort NetworkPort { get; set; }
 
         public Sc2ClientHelper(ushort port)
         {
-            this.port = port;
+            NetworkPort = port;
         }
 
         public async Task<Sc2Game> FetchCurrentGameAsync()
         {
             var uiScreenList = await NetworkHelper.FetchAsync<Sc2UiScreenList>(
-                $"http://127.0.0.1:{port}/ui");
+                $"http://127.0.0.1:{NetworkPort}/ui");
 
             IsConnected = (uiScreenList != null);
 
@@ -51,7 +48,7 @@ namespace Sc2StreamChatAssistant
             }
 
             var sc2Game = await NetworkHelper.FetchAsync<Sc2Game>(
-                $"http://127.0.0.1:{port}/game");
+                $"http://127.0.0.1:{NetworkPort}/game");
 
             if (sc2Game == null || sc2Game.players == null)
             {
@@ -63,7 +60,7 @@ namespace Sc2StreamChatAssistant
             sc2Game.isInProgress = uiScreenList.ActiveScreens?.Count == 0
                 && !sc2Game.isReplay
                 && sc2Game.players.Count >= 2
-                && sc2Game.players.Exists(x => x.result.Equals("Undecided",
+                && sc2Game.players.Exists(x => x.result.Equals(Sc2Game.GameResultUndecided,
                     StringComparison.InvariantCultureIgnoreCase));
 
             return sc2Game;
