@@ -22,6 +22,8 @@ namespace Sc2StreamChatAssistant
         {
             base.OnLoad(e);
 
+            txtLegalNote.Text = System.IO.File.ReadAllText("LEGAL.txt");
+
             Program.Sc2ClientHelper.Sc2ClientConntectionChanged += OnSc2ClientConntectionChanged;
             (new FormOutput()).Show();
         }
