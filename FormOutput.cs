@@ -7,6 +7,17 @@ namespace Sc2StreamChatAssistant
     {
         private string htmlPage_;
 
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                // Disable close window (x) button
+                var result = base.CreateParams;
+                result.ClassStyle |= 0x200; // CP_NOCLOSE_BUTTON
+                return result;
+            }
+        }
+
         public FormOutput()
         {
             InitializeComponent();
