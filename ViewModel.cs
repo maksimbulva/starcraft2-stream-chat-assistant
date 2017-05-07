@@ -38,7 +38,7 @@ namespace Sc2StreamChatAssistant
 
         public async Task UpdateCurrentGameAsync()
         {
-            var newGameData = await Program.sc2ClientHelper.FetchCurrentGameAsync();
+            var newGameData = await Program.Sc2ClientHelper.FetchCurrentGameAsync();
 
             bool isInProgressChanged = currentGame != null
                 && currentGame.isInProgress != newGameData?.isInProgress;

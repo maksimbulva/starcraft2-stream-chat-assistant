@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Sc2StreamChatAssistant
@@ -19,13 +18,9 @@ namespace Sc2StreamChatAssistant
 
         public static ViewModel viewModel { get; private set; }
 
-        public static string oauthToken { get; private set; }
-        public static string accessToken { get; private set; }
-        public static string apiKey { get; private set; }
-
         public static Uri ServerUri { get; private set; }
 
-        public static Sc2ClientHelper sc2ClientHelper;
+        public static Sc2ClientHelper Sc2ClientHelper { get; private set; }
 
         private static WeakReference<HttpClient> httpClient_;
         public static HttpClient httpClient
@@ -35,11 +30,6 @@ namespace Sc2StreamChatAssistant
                 httpClient_.TryGetTarget(out HttpClient result);
                 return result;
             }
-        }
-
-        public static string battleNetUri
-        {
-            get { return "https://eu.api.battle.net"; }
         }
 
         /// <summary>
@@ -56,35 +46,32 @@ namespace Sc2StreamChatAssistant
 
             RecentSc2Region = Settings.Default.RecentSc2Region;
 
-            sc2ClientHelper = new Sc2ClientHelper(Settings.Default.Sc2ClientPort);
+            Sc2ClientHelper = new Sc2ClientHelper(Settings.Default.Sc2ClientPort);
 
             PlayerProfiles = DeserializePlayerProfiles(Settings.Default.PlayerProfiles);
-            // TODO
-            FriendsProfiles = new List<Sc2PlayerData>();
+            FriendsProfiles = DeserializePlayerProfiles(Settings.Default.FrinedsProfiles);
 
             using (var httpClient = new HttpClient())
             {
                 httpClient_ = new WeakReference<HttpClient>(httpClient);
 
-                oauthToken = @"";
-                accessToken = @"";
-                apiKey = @"";
-
                 viewModel = new ViewModel();
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                // formOutput = new FormOutput();
                 Application.Run(new FormSettings());
             }
         }
 
         public static void SaveSettings()
         {
-            Settings.Default.Sc2ClientPort = sc2ClientHelper.port;
+            Settings.Default.Sc2ClientPort = Sc2ClientHelper.port;
             Settings.Default.PlayerProfiles = new StringCollection();
             Settings.Default.PlayerProfiles.AddRange(
                 SerializePlayerProfiles(PlayerProfiles).ToArray());
+            Settings.Default.FrinedsProfiles = new StringCollection();
+            Settings.Default.FrinedsProfiles.AddRange(
+                SerializePlayerProfiles(FriendsProfiles).ToArray());
             Settings.Default.RecentSc2Region = RecentSc2Region;
             Settings.Default.Save();
         }

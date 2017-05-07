@@ -16,7 +16,7 @@ namespace Sc2StreamChatAssistant
         {
             InitializeComponent();
 
-            Sc2ClientPortSelector.Value = Program.sc2ClientHelper.port;
+            Sc2ClientPortSelector.Value = Program.Sc2ClientHelper.port;
             OnSc2ClientConntectionChanged(false);
 
             InitProfilesList(playersList1, Program.PlayerProfiles);
@@ -27,7 +27,7 @@ namespace Sc2StreamChatAssistant
         {
             base.OnLoad(e);
 
-            Program.sc2ClientHelper.Sc2ClientConntectionChanged += OnSc2ClientConntectionChanged;
+            Program.Sc2ClientHelper.Sc2ClientConntectionChanged += OnSc2ClientConntectionChanged;
 
             //await Program.playerData.FetchPlayerDataAsync();
 
@@ -56,7 +56,7 @@ namespace Sc2StreamChatAssistant
 
         private void OnSc2ClientPortSelectorValueChanged(object sender, EventArgs e)
         {
-            Program.sc2ClientHelper.port = (ushort)Sc2ClientPortSelector.Value;
+            Program.Sc2ClientHelper.port = (ushort)Sc2ClientPortSelector.Value;
         }
 
         private void OnFormClosing(object sender, FormClosingEventArgs e)
