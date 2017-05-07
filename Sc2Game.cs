@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sc2StreamChatAssistant
 {
@@ -10,13 +7,18 @@ namespace Sc2StreamChatAssistant
     {
         public class PlayerInfo
         {
-            public ulong id { get; set; }
-            public string name { get; set; }
+            public ulong Id { get; set; }
+            public string Name { get; set; }
             // "user" or "computer"
-            public string type { get; set; }
-            public string race { get; set; }
+            public string Type { get; set; }
+            public string Race { get; set; }
             // "Undecided", "Defeat" or "Victory"
-            public string result { get; set; }
+            public string Result { get; set; }
+
+            public bool IsComputer
+            {
+                get { return !string.IsNullOrEmpty(Type) && char.ToUpper(Type[0]) == 'C'; }
+            }
         }
 
         public const string GameResultUndecided = "Undecided";
@@ -33,7 +35,7 @@ namespace Sc2StreamChatAssistant
                 if (players != null && players.Count > 0)
                 {
                     return players.FirstOrDefault(x =>
-                        Program.PlayerProfiles.Find(y => y.DisplayName == x.name) != null)
+                        Program.PlayerProfiles.Find(y => y.DisplayName == x.Name) != null)
                         ?? players[0];
                 }
                 return null;

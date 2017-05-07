@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Sc2StreamChatAssistant
@@ -22,7 +20,7 @@ namespace Sc2StreamChatAssistant
             new Dictionary<string, PlayerMmr>();
 
         private Sc2Game currentGame_;
-        public Sc2Game currentGame
+        public Sc2Game CurrentGame
         {
             get { return currentGame_; }
             private set
@@ -40,14 +38,14 @@ namespace Sc2StreamChatAssistant
         {
             var newGameData = await Program.Sc2ClientHelper.FetchCurrentGameAsync();
 
-            bool isInProgressChanged = currentGame != null
-                && currentGame.isInProgress != newGameData?.isInProgress;
+            bool isInProgressChanged = CurrentGame != null
+                && CurrentGame.isInProgress != newGameData?.isInProgress;
 
-            currentGame = newGameData;
+            CurrentGame = newGameData;
 
-            if (isInProgressChanged && currentGame != null && !currentGame.isInProgress)
+            if (isInProgressChanged && CurrentGame != null && !CurrentGame.isInProgress)
             {
-                OnGameFinished(currentGame);
+                OnGameFinished(CurrentGame);
             }
 
             // This MMR value is used in case multiple players have the same
@@ -58,15 +56,15 @@ namespace Sc2StreamChatAssistant
 
             for (int playerIndex = 0; playerIndex < 2; ++playerIndex)
             {
-                string playerName = GetPlayerName(playerIndex);
-                if (playerName == null)
+                var playerInfo = GetPlayerInfo(playerIndex);
+                if (playerInfo == null || playerInfo.IsComputer)
                 {
                     continue;
                 }
 
                 Sc2Race playerRace = GetPlayerRace(playerIndex);
                 LadderManager.PlayerStats playerStats = 
-                    await LadderManager.FetchPlayerStatsAsync(playerName, playerRace, expectedMmr);
+                    await LadderManager.FetchPlayerStatsAsync(playerInfo.Name, playerRace, expectedMmr);
                 if (playerStats != null)
                 {
                     if (playerIndex == 0)
@@ -74,7 +72,7 @@ namespace Sc2StreamChatAssistant
                         expectedMmr = playerStats.Rating;
                     }
 
-                    var key = MakeMmrDictionaryKey(playerName, playerRace);
+                    var key = MakeMmrDictionaryKey(playerInfo.Name, playerRace);
                     if (playerMmrs_.TryGetValue(key, out PlayerMmr playerMmr))
                     {
                         playerMmr.currentMmr = playerStats.Rating;
@@ -93,21 +91,21 @@ namespace Sc2StreamChatAssistant
 
         public Sc2Game.PlayerInfo GetPlayerInfo(int index)
         {
-            if (currentGame != null && index < currentGame.players.Count)
+            if (CurrentGame != null && index < CurrentGame.players.Count)
             {
-                return currentGame.players[index];
+                return CurrentGame.players[index];
             }
             return null;
         }
 
         public string GetPlayerName(int index)
         {
-            return GetPlayerInfo(index)?.name;
+            return GetPlayerInfo(index)?.Name;
         }
 
         public Sc2Race GetPlayerRace(int index)
         {
-            return Sc2RaceConverter.FromString(GetPlayerInfo(index)?.race);
+            return Sc2RaceConverter.FromString(GetPlayerInfo(index)?.Race);
         }
 
         public Tuple<string, string> GetPlayerMmr(int index)
@@ -135,7 +133,7 @@ namespace Sc2StreamChatAssistant
         {
             if (game.MyPlayerInfo != null && !game.isReplay)
             {
-                if (game.MyPlayerInfo.result.StartsWith(
+                if (game.MyPlayerInfo.Result.StartsWith(
                     "V", StringComparison.InvariantCultureIgnoreCase))
                 {
                     ++WinsCount;

@@ -60,7 +60,7 @@ namespace Sc2StreamChatAssistant
             sc2Game.isInProgress = uiScreenList.ActiveScreens?.Count == 0
                 && !sc2Game.isReplay
                 && sc2Game.players.Count >= 2
-                && sc2Game.players.Exists(x => x.result.Equals(Sc2Game.GameResultUndecided,
+                && sc2Game.players.Exists(x => x.Result.Equals(Sc2Game.GameResultUndecided,
                     StringComparison.InvariantCultureIgnoreCase));
 
             return sc2Game;
