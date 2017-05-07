@@ -68,5 +68,17 @@ namespace Sc2FarshStreamHelper.Properties {
                 this["Sc2ClientPort"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("eu")]
+        public string RecentSc2Region {
+            get {
+                return ((string)(this["RecentSc2Region"]));
+            }
+            set {
+                this["RecentSc2Region"] = value;
+            }
+        }
     }
 }

@@ -65,25 +65,26 @@ namespace Sc2StreamChatAssistant
                 }
 
                 Sc2Race playerRace = GetPlayerRace(playerIndex);
-                long? mmr = await LadderManager.FetchPlayerMmrAsync(playerName);
-                if (mmr.HasValue)
+                LadderManager.PlayerStats playerStats = 
+                    await LadderManager.FetchPlayerStatsAsync(playerName, playerRace, expectedMmr);
+                if (playerStats != null)
                 {
                     if (playerIndex == 0)
                     {
-                        expectedMmr = mmr.Value;
+                        expectedMmr = playerStats.Rating;
                     }
 
                     var key = MakeMmrDictionaryKey(playerName, playerRace);
                     if (playerMmrs_.TryGetValue(key, out PlayerMmr playerMmr))
                     {
-                        playerMmr.currentMmr = mmr.Value;
+                        playerMmr.currentMmr = playerStats.Rating;
                     }
                     else
                     {
                         playerMmrs_.Add(key, new PlayerMmr()
                         {
-                            currentMmr = mmr.Value,
-                            initialMmr = mmr.Value
+                            currentMmr = playerStats.Rating,
+                            initialMmr = playerStats.Rating
                         });
                     }
                 }

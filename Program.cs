@@ -15,6 +15,8 @@ namespace Sc2StreamChatAssistant
         public static List<Sc2PlayerData> PlayerProfiles { get; private set; }
         public static List<Sc2PlayerData> FriendsProfiles { get; private set; }
 
+        public static string RecentSc2Region { get; set; }
+
         public static ViewModel viewModel { get; private set; }
 
         public static string oauthToken { get; private set; }
@@ -52,6 +54,8 @@ namespace Sc2StreamChatAssistant
             }
             ServerUri = new Uri(Settings.Default.ServerUri);
 
+            RecentSc2Region = Settings.Default.RecentSc2Region;
+
             sc2ClientHelper = new Sc2ClientHelper(Settings.Default.Sc2ClientPort);
 
             PlayerProfiles = DeserializePlayerProfiles(Settings.Default.PlayerProfiles);
@@ -81,6 +85,7 @@ namespace Sc2StreamChatAssistant
             Settings.Default.PlayerProfiles = new StringCollection();
             Settings.Default.PlayerProfiles.AddRange(
                 SerializePlayerProfiles(PlayerProfiles).ToArray());
+            Settings.Default.RecentSc2Region = RecentSc2Region;
             Settings.Default.Save();
         }
 

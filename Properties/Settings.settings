@@ -14,5 +14,8 @@
     <Setting Name="Sc2ClientPort" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">6120</Value>
     </Setting>
+    <Setting Name="RecentSc2Region" Type="System.String" Scope="User">
+      <Value Profile="(Default)">eu</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

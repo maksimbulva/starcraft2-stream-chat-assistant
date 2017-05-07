@@ -5,10 +5,6 @@ namespace Sc2StreamChatAssistant
 {
     static class NetworkHelper
     {
-        class RequestFailedException : Exception
-        {
-        }
-
         public static async Task<T> FetchAsync<T>(string requestUri) where T : new()
         {
             try
