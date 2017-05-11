@@ -57,7 +57,7 @@
             this.Controls.Add(this.webBrowserOutput);
             this.ForeColor = System.Drawing.Color.White;
             this.Name = "FormOutput";
-            this.Text = "Form1";
+            this.Text = "Output - Sc2StreamChatAssistant";
             this.ResumeLayout(false);
 
         }

@@ -26,7 +26,7 @@ namespace Sc2StreamChatAssistant
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            htmlPage_ = System.IO.File.ReadAllText("output.html");
+            htmlPage_ = System.IO.File.ReadAllText("template_output_1vs1.html");
             OnTimerTick(null, null);
         }
 
@@ -41,19 +41,38 @@ namespace Sc2StreamChatAssistant
         private void updateBrowserPage()
         {
             var viewModel = Program.ViewModel;
-            var myMmr = viewModel.GetPlayerMmr(0);
-            var theirMmr = viewModel.GetPlayerMmr(1);
 
             var curPage = htmlPage_
-                .Replace("%my_name%", viewModel.GetPlayerName(0))
-                .Replace("%my_race%", Sc2RaceToString(viewModel.GetPlayerRace(0)))
-                .Replace("%their_name%", viewModel.GetPlayerName(1))
-                .Replace("%their_race%", Sc2RaceToString(viewModel.GetPlayerRace(1)))
                 .Replace("%wins_count%", viewModel.WinsCount.ToString())
-                .Replace("%loses_count%", viewModel.LosesCount.ToString())
-                .Replace("%my_mmr%", myMmr.Item1)
-                .Replace("%my_mmr_progress%", myMmr.Item2)
-                .Replace("%their_mmr%", theirMmr.Item1);
+                .Replace("%loses_count%", viewModel.LosesCount.ToString());
+
+            for (int i = 1; i <= 4; ++i)
+            {
+                string playerName = viewModel.GetPlayerName(i - 1);
+                string playerRace = Sc2RaceToString(viewModel.GetPlayerRace(i - 1));
+                string playerNameWithRace = null;
+                if (!string.IsNullOrEmpty(playerName))
+                {
+                    playerNameWithRace = $"{playerName} ({playerRace})";
+                }
+
+                curPage = curPage
+                    .Replace($"%player{i}_name%", playerName)
+                    .Replace($"%player{i}_race%", playerRace)
+                    .Replace($"%player{i}_mmr%", viewModel.GetPlayerMmr(i - 1).Item1)
+                    .Replace($"%player{i}_name_race%", playerNameWithRace);
+            }
+
+            var myMmr = viewModel.GetPlayerMmr(0);
+            string myMmrWithProgress = null;
+            if (!string.IsNullOrEmpty(myMmr.Item1))
+            {
+                myMmrWithProgress = $"{myMmr.Item1} ({myMmr.Item2})";
+            }
+
+            curPage = curPage
+                .Replace("%player1_mmr_progress%", myMmr.Item2)
+                .Replace("%player1_mmr_with_progress%", myMmrWithProgress);
 
             webBrowserOutput.DocumentText = curPage;
         }

@@ -60,13 +60,14 @@
             this.tableLayoutPanel1.Controls.Add(this.Sc2ClientPortSelector, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.button1, 2, 1);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(688, 66);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(753, 66);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // label1
@@ -98,7 +99,7 @@
             0,
             0});
             this.Sc2ClientPortSelector.Name = "Sc2ClientPortSelector";
-            this.Sc2ClientPortSelector.Size = new System.Drawing.Size(92, 25);
+            this.Sc2ClientPortSelector.Size = new System.Drawing.Size(130, 25);
             this.Sc2ClientPortSelector.TabIndex = 3;
             this.Sc2ClientPortSelector.ValueChanged += new System.EventHandler(this.OnSc2ClientPortSelectorValueChanged);
             // 
@@ -115,7 +116,7 @@
             // button1
             // 
             this.button1.AutoSize = true;
-            this.button1.Location = new System.Drawing.Point(273, 36);
+            this.button1.Location = new System.Drawing.Point(311, 36);
             this.button1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(58, 27);
@@ -144,7 +145,7 @@
             this.tableLayoutPanel2.Controls.Add(this.playersList1, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.txtDuplicateNamesInfo, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 66);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 5;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -152,7 +153,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(753, 633);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(753, 567);
             this.tableLayoutPanel2.TabIndex = 3;
             // 
             // playersList2
