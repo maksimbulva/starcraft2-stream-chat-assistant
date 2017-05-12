@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="txtDuplicateNamesInfo.Text" xml:space="preserve">
-    <value>If more than one of you characters share the same name (even though clan tags differ), the App cannot distinct between them and all except one of such characters are marked inactive. If your current character was marked inactive, please put her on top of the list to make her active.</value>
+    <value>Due to public API limitations, the application cannot distinct between characters with the same display name (even if they have distinct clan tags). Because of this, the application can show wrong MMR for unknown players. Put your 2vs2 partners into your friends list to resolve ambiguity. In addition, if you have few characters with the same character name, please make sure that your current character is on the top of the list.</value>
   </data>
 </root>

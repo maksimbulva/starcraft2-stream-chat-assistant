@@ -67,7 +67,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(753, 66);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(758, 66);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // label1
@@ -128,12 +128,12 @@
             // txtLegalNote
             // 
             this.txtLegalNote.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.txtLegalNote.Location = new System.Drawing.Point(0, 633);
+            this.txtLegalNote.Location = new System.Drawing.Point(0, 680);
             this.txtLegalNote.Multiline = true;
             this.txtLegalNote.Name = "txtLegalNote";
             this.txtLegalNote.ReadOnly = true;
             this.txtLegalNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLegalNote.Size = new System.Drawing.Size(753, 75);
+            this.txtLegalNote.Size = new System.Drawing.Size(758, 87);
             this.txtLegalNote.TabIndex = 1;
             this.txtLegalNote.Text = "LEGAL";
             // 
@@ -154,36 +154,36 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(753, 567);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(758, 614);
             this.tableLayoutPanel2.TabIndex = 3;
             // 
             // playersList2
             // 
             this.playersList2.AutoSize = true;
             this.playersList2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.playersList2.Location = new System.Drawing.Point(3, 287);
+            this.playersList2.Location = new System.Drawing.Point(3, 319);
             this.playersList2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.playersList2.Name = "playersList2";
-            this.playersList2.Size = new System.Drawing.Size(747, 189);
+            this.playersList2.Size = new System.Drawing.Size(752, 189);
             this.playersList2.TabIndex = 1;
             // 
             // panel1
             // 
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(2, 266);
+            this.panel1.Location = new System.Drawing.Point(2, 298);
             this.panel1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(749, 14);
+            this.panel1.Size = new System.Drawing.Size(754, 14);
             this.panel1.TabIndex = 14;
             // 
             // playersList1
             // 
             this.playersList1.AutoSize = true;
             this.playersList1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.playersList1.Location = new System.Drawing.Point(3, 70);
+            this.playersList1.Location = new System.Drawing.Point(3, 102);
             this.playersList1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.playersList1.Name = "playersList1";
-            this.playersList1.Size = new System.Drawing.Size(747, 189);
+            this.playersList1.Size = new System.Drawing.Size(752, 189);
             this.playersList1.TabIndex = 1;
             // 
             // txtDuplicateNamesInfo
@@ -195,7 +195,7 @@
             this.txtDuplicateNamesInfo.Multiline = true;
             this.txtDuplicateNamesInfo.Name = "txtDuplicateNamesInfo";
             this.txtDuplicateNamesInfo.ReadOnly = true;
-            this.txtDuplicateNamesInfo.Size = new System.Drawing.Size(749, 60);
+            this.txtDuplicateNamesInfo.Size = new System.Drawing.Size(754, 92);
             this.txtDuplicateNamesInfo.TabIndex = 11;
             this.txtDuplicateNamesInfo.Text = resources.GetString("txtDuplicateNamesInfo.Text");
             // 
@@ -219,7 +219,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(753, 708);
+            this.ClientSize = new System.Drawing.Size(758, 767);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Controls.Add(this.txtLegalNote);
             this.Controls.Add(this.tableLayoutPanel1);
