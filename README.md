@@ -4,7 +4,7 @@ Stream chat bot which provides basic information like win-loses stats and MMR ch
 ##Custom output formatting
 If you would like to change the visual output of the software, please take a look on template_output_1vs1.html and template_output_2vs2.html files. The software looks for placeholders (identifiers surrounded by '%' symbol) and replaces them with the appropriate information.
 The following placeholders are available:
-- %wins_count# - the number of your wins
+- %wins_count% - the number of your wins
 - %loses_count% - the number of your loses
 - %player1_name% - the name of character for player 1 (your character)
 - %player1_race% - the single-letter code of the race of player 1 (T, Z, P or R)
