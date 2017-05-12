@@ -34,7 +34,7 @@
             this.LblConnectionToSc2 = new System.Windows.Forms.Label();
             this.Sc2ClientPortSelector = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnHelp = new System.Windows.Forms.Button();
             this.txtLegalNote = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.playersList2 = new Sc2StreamChatAssistant.PlayersList();
@@ -59,7 +59,7 @@
             this.tableLayoutPanel1.Controls.Add(this.LblConnectionToSc2, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.Sc2ClientPortSelector, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.button1, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.btnHelp, 2, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
@@ -113,16 +113,17 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "StarCraft 2 client port";
             // 
-            // button1
+            // btnHelp
             // 
-            this.button1.AutoSize = true;
-            this.button1.Location = new System.Drawing.Point(311, 36);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(58, 27);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "Help";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnHelp.AutoSize = true;
+            this.btnHelp.Location = new System.Drawing.Point(311, 36);
+            this.btnHelp.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnHelp.Name = "btnHelp";
+            this.btnHelp.Size = new System.Drawing.Size(58, 27);
+            this.btnHelp.TabIndex = 4;
+            this.btnHelp.Text = "Help";
+            this.btnHelp.UseVisualStyleBackColor = true;
+            this.btnHelp.Click += new System.EventHandler(this.OnBtnHelpClick);
             // 
             // txtLegalNote
             // 
@@ -245,7 +246,7 @@
         private System.Windows.Forms.Label LblConnectionToSc2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown Sc2ClientPortSelector;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnHelp;
         private System.Windows.Forms.TextBox txtLegalNote;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.TextBox txtDuplicateNamesInfo;

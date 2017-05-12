@@ -47,6 +47,20 @@ namespace Sc2StreamChatAssistant
             Program.Sc2ClientHelper.NetworkPort = (ushort)Sc2ClientPortSelector.Value;
         }
 
+        private void OnBtnHelpClick(object sender, EventArgs e)
+        {
+            try
+            {
+                var uri = new Uri("file:///" + System.IO.Directory.GetCurrentDirectory() + "/sc2client_port_help.html");
+                System.Diagnostics.Process.Start("cmd", "/C start " + uri);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Cannot find default browser." + Environment.NewLine
+                    + "Please open sc2client_port_help.html from the application directory");
+            }
+        }
+
         private void OnFormClosing(object sender, FormClosingEventArgs e)
         {
             Program.SaveSettings();
