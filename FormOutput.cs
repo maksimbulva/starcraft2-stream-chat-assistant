@@ -5,7 +5,8 @@ namespace Sc2StreamChatAssistant
 {
     public partial class FormOutput : Form
     {
-        private string htmlPage_;
+        private string templatePage1vs1_;
+        private string templatePage2vs2_;
 
         protected override CreateParams CreateParams
         {
@@ -26,23 +27,35 @@ namespace Sc2StreamChatAssistant
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            htmlPage_ = System.IO.File.ReadAllText("template_output_1vs1.html");
+            templatePage1vs1_ = System.IO.File.ReadAllText("template_output_1vs1.html");
+            templatePage2vs2_ = System.IO.File.ReadAllText("template_output_2vs2.html");
             OnTimerTick(null, null);
+            Program.ViewModel.WinsCountChanged += _ => UpdateBrowserPage();
+            Program.ViewModel.LosesCountChanged += _ => UpdateBrowserPage();
+        }
+
+        private void OnFormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
         }
 
         private async void OnTimerTick(object sender, EventArgs e)
         {
             sc2HostFetchTimer.Enabled = false;
             await Program.ViewModel.UpdateCurrentGameAsync();
-            updateBrowserPage();
+            UpdateBrowserPage();
             sc2HostFetchTimer.Enabled = true;
         }
 
-        private void updateBrowserPage()
+        private void UpdateBrowserPage()
         {
             var viewModel = Program.ViewModel;
 
-            var curPage = htmlPage_
+            var curPage = string.IsNullOrEmpty(viewModel.GetPlayerName(3))
+                ? templatePage1vs1_
+                : templatePage2vs2_;
+
+            curPage = curPage
                 .Replace("%wins_count%", viewModel.WinsCount.ToString())
                 .Replace("%loses_count%", viewModel.LosesCount.ToString());
 

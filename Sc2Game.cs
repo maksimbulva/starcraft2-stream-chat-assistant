@@ -55,6 +55,16 @@ namespace Sc2StreamChatAssistant
                 var index = players.FindIndex(x => ReferenceEquals(x, myPlayer));
                 if (index >= 0)
                 {
+                    // Only 2vs2 and 1vs1 modes are supported
+                    if (players.Count == 4 && index > 2)
+                    {
+                        // Put both players from the player team to the front
+                        players.Insert(0, players[2]);
+                        players.RemoveAt(3);
+                        players.Insert(0, players[3]);
+                        players.RemoveAt(4);
+                        index = players.FindIndex(x => ReferenceEquals(x, myPlayer));
+                    }
                     players.RemoveAt(index);
                     players.Insert(0, myPlayer);
                 }

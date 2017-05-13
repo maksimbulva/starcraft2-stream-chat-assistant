@@ -14,7 +14,13 @@ namespace Sc2StreamChatAssistant
 
         public delegate void CurrentGameUpdatedEventHandler(Sc2Game game);
         public event CurrentGameUpdatedEventHandler currentGameUpdated;
-        
+
+        public delegate void WinsCountChangedEventHandler(uint count);
+        public event WinsCountChangedEventHandler WinsCountChanged;
+
+        public delegate void LosesCountChangedEventHandler(uint count);
+        public event LosesCountChangedEventHandler LosesCountChanged;
+
         // Key is in form <displayName>@<race>
         private Dictionary<string, PlayerMmr> playerMmrs_ =
             new Dictionary<string, PlayerMmr>();
@@ -31,8 +37,33 @@ namespace Sc2StreamChatAssistant
             }
         }
 
-        public uint WinsCount { get; set; }
-        public uint LosesCount { get; set; }
+        private uint winsCount_;
+        public uint WinsCount
+        {
+            get { return winsCount_; }
+            set
+            {
+                if (winsCount_ != value)
+                {
+                    winsCount_ = value;
+                    WinsCountChanged?.Invoke(winsCount_);
+                }
+            }
+        }
+
+        private uint losesCount_;
+        public uint LosesCount
+        {
+            get { return losesCount_; }
+            set
+            {
+                if (losesCount_ != value)
+                {
+                    losesCount_ = value;
+                    LosesCountChanged?.Invoke(losesCount_);
+                }
+            }
+        }
 
         public async Task UpdateCurrentGameAsync()
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -7,6 +8,14 @@ namespace Sc2StreamChatAssistant
 {
     public partial class FormSettings : Form
     {
+        class NewestReleaseData
+        {
+            [JsonProperty(PropertyName = "version")]
+            public int Version { get; private set; }
+        }
+
+        private Form formOutput_;
+
         public FormSettings()
         {
             InitializeComponent();
@@ -18,14 +27,29 @@ namespace Sc2StreamChatAssistant
             InitProfilesList(playersList2, Program.FriendsProfiles);
         }
 
-        protected override void OnLoad(EventArgs e)
+        protected override async void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
             txtLegalNote.Text = System.IO.File.ReadAllText("LEGAL.txt");
 
             Program.Sc2ClientHelper.Sc2ClientConntectionChanged += OnSc2ClientConntectionChanged;
-            (new FormOutput()).Show();
+            Program.ViewModel.WinsCountChanged += value => numericWinsCount.Value = value;
+            Program.ViewModel.LosesCountChanged += value => numericLosesCount.Value = value;
+
+            numericWinsCount.ValueChanged += (o, _) => Program.ViewModel.WinsCount = (uint)numericWinsCount.Value;
+            numericLosesCount.ValueChanged += (o, _) => Program.ViewModel.LosesCount = (uint)numericLosesCount.Value;
+
+            formOutput_ = new FormOutput();
+            formOutput_.Show();
+
+            var releaseData = await NetworkHelper.FetchAsync<NewestReleaseData>(
+                // For now the region does not matter
+                Program.ServerUri + "/data/eu/client_version");
+            if (releaseData.Version > Program.Version)
+            {
+                txtNewVersionAvailable.Visible = true;
+            }
         }
 
         private void OnSc2ClientConntectionChanged(bool isConnected)

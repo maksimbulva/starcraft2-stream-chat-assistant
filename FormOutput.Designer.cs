@@ -58,6 +58,7 @@
             this.ForeColor = System.Drawing.Color.White;
             this.Name = "FormOutput";
             this.Text = "Output - Sc2StreamChatAssistant";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.ResumeLayout(false);
 
         }

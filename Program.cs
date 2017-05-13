@@ -32,6 +32,8 @@ namespace Sc2StreamChatAssistant
             }
         }
 
+        public static int Version { get { return Settings.Default.Version; } }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
