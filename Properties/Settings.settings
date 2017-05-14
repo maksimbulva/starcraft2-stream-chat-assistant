@@ -18,7 +18,7 @@
       <Value Profile="(Default)">eu</Value>
     </Setting>
     <Setting Name="Version" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">100</Value>
     </Setting>
   </Settings>
 </SettingsFile>
