@@ -36,11 +36,7 @@ namespace Sc2StreamChatAssistant
             long expectedMmr)
         {
             // Check if we know this player and have her full profile path
-            var profile = Program.PlayerProfiles.Find(x => x.DisplayName == displayName);
-            if (profile == null)
-            {
-                profile = Program.FriendsProfiles.Find(x => x.DisplayName == displayName);
-            }
+            var profile = Program.FindProfile(displayName);
             if (profile != null)
             {
                 Program.RecentSc2Region = profile.RegionCode;

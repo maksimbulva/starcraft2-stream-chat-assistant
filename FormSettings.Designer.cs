@@ -49,7 +49,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.numericLosesCount = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboTeammate = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1.SuspendLayout();
@@ -244,7 +244,7 @@
             this.flowLayoutPanel1.Controls.Add(this.label5);
             this.flowLayoutPanel1.Controls.Add(this.numericLosesCount);
             this.flowLayoutPanel1.Controls.Add(this.label6);
-            this.flowLayoutPanel1.Controls.Add(this.comboBox1);
+            this.flowLayoutPanel1.Controls.Add(this.comboTeammate);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 566);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -292,13 +292,15 @@
             this.label6.TabIndex = 4;
             this.label6.Text = "Your teammate";
             // 
-            // comboBox1
+            // comboTeammate
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(304, 3);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(176, 25);
-            this.comboBox1.TabIndex = 5;
+            this.comboTeammate.Enabled = false;
+            this.comboTeammate.FormattingEnabled = true;
+            this.comboTeammate.Location = new System.Drawing.Point(304, 3);
+            this.comboTeammate.Name = "comboTeammate";
+            this.comboTeammate.Size = new System.Drawing.Size(176, 25);
+            this.comboTeammate.TabIndex = 5;
+            this.comboTeammate.SelectedValueChanged += new System.EventHandler(this.OnComboTeammateSelectedValueChanged);
             // 
             // groupBox1
             // 
@@ -368,6 +370,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown numericLosesCount;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboTeammate;
     }
 }

@@ -10,10 +10,11 @@ namespace Sc2StreamChatAssistant
         {
             public long currentMmr;
             public long initialMmr;
+            public DateTime timestamp = DateTime.Now;
         }
 
         public delegate void CurrentGameUpdatedEventHandler(Sc2Game game);
-        public event CurrentGameUpdatedEventHandler currentGameUpdated;
+        public event CurrentGameUpdatedEventHandler CurrentGameUpdated;
 
         public delegate void WinsCountChangedEventHandler(uint count);
         public event WinsCountChangedEventHandler WinsCountChanged;
@@ -33,7 +34,7 @@ namespace Sc2StreamChatAssistant
             {
                 // TODO - consider check if the game was really updated
                 currentGame_ = value;
-                currentGameUpdated?.Invoke(currentGame_);
+                CurrentGameUpdated?.Invoke(currentGame_);
             }
         }
 
@@ -65,6 +66,8 @@ namespace Sc2StreamChatAssistant
             }
         }
 
+        public Sc2Game.PlayerInfo Teammate { get; set; }
+
         public async Task UpdateCurrentGameAsync()
         {
             var newGameData = await Program.Sc2ClientHelper.FetchCurrentGameAsync();
@@ -85,7 +88,7 @@ namespace Sc2StreamChatAssistant
             // Usually we set this to the local player's MMR value
             long expectedMmr = 4500;
 
-            for (int playerIndex = 0; playerIndex < 2; ++playerIndex)
+            for (int playerIndex = 0; playerIndex < 4; ++playerIndex)
             {
                 var playerInfo = GetPlayerInfo(playerIndex);
                 if (playerInfo == null || playerInfo.IsComputer)
@@ -94,6 +97,16 @@ namespace Sc2StreamChatAssistant
                 }
 
                 Sc2Race playerRace = GetPlayerRace(playerIndex);
+
+                // Do not perform lookup too often as it is slow operation
+                var key = MakeMmrDictionaryKey(playerInfo.Name, playerRace);
+                if (Program.FindProfile(playerInfo.Name) == null
+                    && playerMmrs_.TryGetValue(key, out PlayerMmr cachedMmr)
+                    && cachedMmr.timestamp.AddMinutes(5.0) < DateTime.Now)
+                {
+                    continue;
+                }
+
                 LadderManager.PlayerStats playerStats = 
                     await LadderManager.FetchPlayerStatsAsync(playerInfo.Name, playerRace, expectedMmr);
                 if (playerStats != null)
@@ -103,10 +116,10 @@ namespace Sc2StreamChatAssistant
                         expectedMmr = playerStats.Rating;
                     }
 
-                    var key = MakeMmrDictionaryKey(playerInfo.Name, playerRace);
                     if (playerMmrs_.TryGetValue(key, out PlayerMmr playerMmr))
                     {
                         playerMmr.currentMmr = playerStats.Rating;
+                        playerMmr.timestamp = DateTime.Now;
                     }
                     else
                     {

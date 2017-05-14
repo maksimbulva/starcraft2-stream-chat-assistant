@@ -19,6 +19,16 @@ namespace Sc2StreamChatAssistant
             {
                 get { return !string.IsNullOrEmpty(Type) && char.ToUpper(Type[0]) == 'C'; }
             }
+
+            public bool IsSame(PlayerInfo other)
+            {
+                return other != null && Name == other.Name;
+            }
+
+            public override string ToString()
+            {
+                return $"{Name} ({Race})";
+            }
         }
 
         public const string GameResultUndecided = "Undecided";
@@ -52,22 +62,50 @@ namespace Sc2StreamChatAssistant
             if (players != null)
             {
                 var myPlayer = MyPlayerInfo;
-                var index = players.FindIndex(x => ReferenceEquals(x, myPlayer));
-                if (index >= 0)
+                var teammate = players.Count == 4 ? Program.ViewModel.Teammate : null;
+                if (!players.Exists(x => x.IsSame(teammate)))
                 {
-                    // Only 2vs2 and 1vs1 modes are supported
-                    if (players.Count == 4 && index > 2)
-                    {
-                        // Put both players from the player team to the front
-                        players.Insert(0, players[2]);
-                        players.RemoveAt(3);
-                        players.Insert(0, players[3]);
-                        players.RemoveAt(4);
-                        index = players.FindIndex(x => ReferenceEquals(x, myPlayer));
-                    }
-                    players.RemoveAt(index);
-                    players.Insert(0, myPlayer);
+                    teammate = null;
                 }
+
+                if (players.Count == 4 && teammate == null)
+                {
+                    // Deduce teammate from player ids
+                    var index = players.IndexOf(myPlayer);
+                    ulong teammateId = 0;
+                    switch (myPlayer.Id)
+                    {
+                        case 1:
+                            teammateId = 2;
+                            break;
+                        case 2:
+                            teammateId = 1;
+                            break;
+                        case 3:
+                            teammateId = 4;
+                            break;
+                        case 4:
+                            teammateId = 3;
+                            break;
+                    }
+                    teammate = players.Find(x => x.Id == teammateId);
+                }
+
+                players = players.OrderBy(x =>
+                {
+                    // My player is the first player
+                    if (ReferenceEquals(x, myPlayer))
+                    {
+                        return 0;
+                    }
+                    // My teammate is the second player
+                    else if (x.IsSame(teammate))
+                    {
+                        return 1;
+                    }
+                    // The rest of the players
+                    return 2;
+                }).ToList();
             }
         }
     }

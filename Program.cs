@@ -78,6 +78,12 @@ namespace Sc2StreamChatAssistant
             Settings.Default.Save();
         }
 
+        public static Sc2PlayerData FindProfile(string displayName)
+        {
+            return PlayerProfiles.Find(x => x.DisplayName == displayName)
+                ?? FriendsProfiles.Find(x => x.DisplayName == displayName);
+        }
+
         private static IEnumerable<string> SerializePlayerProfiles(List<Sc2PlayerData> profiles)
         {
             return profiles.Select(x => JsonConvert.SerializeObject(x));

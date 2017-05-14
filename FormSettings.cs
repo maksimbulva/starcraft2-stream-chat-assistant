@@ -50,6 +50,9 @@ namespace Sc2StreamChatAssistant
             {
                 txtNewVersionAvailable.Visible = true;
             }
+
+            UpdateTeammateSelectionList();
+            Program.ViewModel.CurrentGameUpdated += _ => UpdateTeammateSelectionList();
         }
 
         private void OnSc2ClientConntectionChanged(bool isConnected)
@@ -90,6 +93,12 @@ namespace Sc2StreamChatAssistant
             Program.SaveSettings();
         }
 
+
+        private void OnComboTeammateSelectedValueChanged(object sender, EventArgs e)
+        {
+            Program.ViewModel.Teammate = comboTeammate.SelectedItem as Sc2Game.PlayerInfo;
+        }
+
         private void InitProfilesList(PlayersList control, List<Sc2PlayerData> playerData)
         {
             control.SetPlayerProfiles(playerData);
@@ -98,6 +107,53 @@ namespace Sc2StreamChatAssistant
                 playerData.Clear();
                 playerData.AddRange(profiles);
             };
+        }
+
+        private void UpdateTeammateSelectionList()
+        {
+            var game = Program.ViewModel.CurrentGame;
+            if (game == null || game.players == null || game.players.Count != 4)
+            {
+                comboTeammate.Items.Clear();
+                comboTeammate.Enabled = false;
+                Program.ViewModel.Teammate = null;
+                return;
+            }
+
+            // Check if the combo box contains actual list of players
+            var myPlayer = game.MyPlayerInfo;
+            var comboItems = new List<Sc2Game.PlayerInfo>();
+            if (comboTeammate.Items != null)
+            {
+                foreach (var item in comboTeammate.Items)
+                {
+                    var playerInfo = item as Sc2Game.PlayerInfo;
+                    if (playerInfo != null)
+                    {
+                        comboItems.Add(playerInfo);
+                    }
+                }
+            }
+
+            if (comboItems.Count != 3 || !comboItems.TrueForAll(
+                x => game.players.Exists(y => y.IsSame(x))))
+            {
+                var oldTeammate = Program.ViewModel.Teammate;
+                comboTeammate.Items.Clear();
+                var otherPlayers = new List<Sc2Game.PlayerInfo>(game.players);
+                otherPlayers.Remove(myPlayer);
+                comboTeammate.Items.AddRange(otherPlayers.ToArray());
+                // Try preserving previously selected teammate
+                if (oldTeammate != null)
+                {
+                    var newTeammate = game.players.Find(x => x.IsSame(oldTeammate));
+                    if (newTeammate != null)
+                    {
+                        comboTeammate.SelectedItem = newTeammate;
+                    }
+                }
+            }
+            comboTeammate.Enabled = true;
         }
     }
 }
