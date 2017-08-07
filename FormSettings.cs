@@ -25,6 +25,9 @@ namespace Sc2StreamChatAssistant
 
             InitProfilesList(playersList1, Program.PlayerProfiles);
             InitProfilesList(playersList2, Program.FriendsProfiles);
+
+            playersList1.HeaderText = "Enter link to your character(s) on battle.net. For example:";
+            playersList2.HeaderText = "Enter link to your friends' character on battle.net. For example:";
         }
 
         protected override async void OnLoad(EventArgs e)

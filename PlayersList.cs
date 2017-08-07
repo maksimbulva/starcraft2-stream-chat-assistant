@@ -14,6 +14,12 @@ namespace Sc2StreamChatAssistant
             InitializeComponent();
         }
 
+        public string HeaderText
+        {
+            get { return label1.Text; }
+            set { label1.Text = value; }
+        }
+
         public void SetPlayerProfiles(IEnumerable<Sc2PlayerData> profiles)
         {
             listOfPlayers.Items.Clear();
