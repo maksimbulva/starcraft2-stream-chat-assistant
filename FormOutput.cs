@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Sc2StreamChatAssistant
 {
     public partial class FormOutput : Form
     {
-        private string templatePage1vs1_;
-        private string templatePage2vs2_;
+        private List<string> templatePages_ = new List<string>(4);
 
         protected override CreateParams CreateParams
         {
@@ -27,8 +27,10 @@ namespace Sc2StreamChatAssistant
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            templatePage1vs1_ = System.IO.File.ReadAllText("template_output_1vs1.html");
-            templatePage2vs2_ = System.IO.File.ReadAllText("template_output_2vs2.html");
+            templatePages_.Add(System.IO.File.ReadAllText("template_output_1vs1.html"));
+            templatePages_.Add(System.IO.File.ReadAllText("template_output_2vs2.html"));
+            templatePages_.Add(System.IO.File.ReadAllText("template_output_3vs3.html"));
+            templatePages_.Add(System.IO.File.ReadAllText("template_output_4vs4.html"));
             OnTimerTick(null, null);
             Program.ViewModel.WinsCountChanged += _ => UpdateBrowserPage();
             Program.ViewModel.LosesCountChanged += _ => UpdateBrowserPage();
@@ -50,16 +52,18 @@ namespace Sc2StreamChatAssistant
         private void UpdateBrowserPage()
         {
             var viewModel = Program.ViewModel;
-
-            var curPage = string.IsNullOrEmpty(viewModel.GetPlayerName(3))
-                ? templatePage1vs1_
-                : templatePage2vs2_;
+            int playersCount = viewModel.PlayersCount;
+            string curPage = GetTemplatePage(playersCount);
+            if (curPage == null)
+            {
+                return;
+            }
 
             curPage = curPage
                 .Replace("%wins_count%", viewModel.WinsCount.ToString())
                 .Replace("%loses_count%", viewModel.LosesCount.ToString());
 
-            for (int i = 1; i <= 4; ++i)
+            for (int i = 1; i <= 8; ++i)    // 8 is the max player index in html templates
             {
                 string playerName = viewModel.GetPlayerName(i - 1);
                 string playerRace = Sc2RaceToString(viewModel.GetPlayerRace(i - 1));
@@ -104,6 +108,20 @@ namespace Sc2StreamChatAssistant
                     return "R";
             }
             return string.Empty;
+        }
+
+        private string GetTemplatePage(int playersCount)
+        {
+            switch (playersCount)
+            {
+                case 4: // 2 vs 2
+                    return templatePages_[1];
+                case 6: // 3 vs 3
+                    return templatePages_[2];
+                case 8: // 4 vs 4
+                    return templatePages_[3];
+            }
+            return templatePages_[0]; // 1vs1
         }
     }
 }

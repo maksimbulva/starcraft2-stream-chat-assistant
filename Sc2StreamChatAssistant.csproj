@@ -126,6 +126,14 @@
   <ItemGroup>
     <None Include="Resources\Icon1.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="template_output_3vs3.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="template_output_4vs4.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy $(ProjectDir)sc2client_port_help.html $(TargetDir)sc2client_port_help.html /y

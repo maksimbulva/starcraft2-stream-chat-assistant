@@ -142,6 +142,8 @@ namespace Sc2StreamChatAssistant
             return null;
         }
 
+        public int PlayersCount { get { return CurrentGame?.players?.Count ?? 0; } }
+
         public string GetPlayerName(int index)
         {
             return GetPlayerInfo(index)?.Name;
